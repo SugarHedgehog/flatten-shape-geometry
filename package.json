@@ -1,0 +1,32 @@
+{
+    "name": "shape-geometry",
+    "version": "0.0.1",
+    "description": "A library for shape parameters and rendering in canvas.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/SugarHedgehog/shape-geometry.git"
+    },
+    "keywords": [
+        "shape",
+        "triangle",
+        "geometry",
+        "math",
+        "canvas"
+    ],
+    "author": "sugar_hengerhog",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/SugarHedgehog/shape-geometry/issues"
+    },
+    "homepage": "https://github.com/SugarHedgehog/shape-geometry#readme",
+    "dependencies": {
+        "@flatten-js/core": "^1.0.0",
+        "degrees-radians": "^1.0.0",
+        "radians-degrees": "^1.0.0",
+        "mathjs": "^9.0.0"
+    }
+}
