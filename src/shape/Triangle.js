@@ -1,8 +1,9 @@
-import { Point, Angle, Segment } from '@flatten-js/core';
+import { Point, Segment } from '@flatten-js/core';
 import degreesToRadians from 'degrees-radians';
 import radiansToDegrees from 'radians-degrees';
-import math from 'mathjs';
+import { subtract, dot, multiply, add } from 'mathjs';
 import Shape from '../shape/Shape';
+import Angle from '../shape/Angle'
 
 /**
  * The constructor of the `Triangle` class initializes a triangle object using the provided parameters.
@@ -340,16 +341,16 @@ export default class Triangle extends Shape {
         const y0 = point.y;
 
         // Create vectors using math.js
-        const lineVector = math.subtract([x2, y2], [x1, y1]);
-        const pointVector = math.subtract([x0, y0], [x1, y1]);
+        const lineVector = subtract([x2, y2], [x1, y1]);
+        const pointVector = subtract([x0, y0], [x1, y1]);
 
         // Project pointVector onto lineVector
-        const lineLengthSquared = math.dot(lineVector, lineVector);
-        const projectionFactor = math.dot(pointVector, lineVector) / lineLengthSquared;
-        const projection = math.multiply(lineVector, projectionFactor);
+        const lineLengthSquared = dot(lineVector, lineVector);
+        const projectionFactor = dot(pointVector, lineVector) / lineLengthSquared;
+        const projection = multiply(lineVector, projectionFactor);
 
         // Calculate the foot of the perpendicular
-        const foot = math.add([x1, y1], projection);
+        const foot = add([x1, y1], projection);
 
         return new Point(foot[0], foot[1]);
     }
