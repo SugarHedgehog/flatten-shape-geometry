@@ -1,4 +1,4 @@
-import Triangle from './src/Triangle';
+import Triangle from './src/shape/Triangle';
 
 export {
     Triangle,
