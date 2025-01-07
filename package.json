@@ -1,5 +1,5 @@
 {
-    "name": "shape-geometry",
+    "name": "flatten-shape-geometry",
     "version": "0.0.1",
     "description": "A library for shape parameters and rendering in canvas.",
     "main": "index.js",
@@ -8,7 +8,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/SugarHedgehog/shape-geometry.git"
+        "url": "git+https://github.com/SugarHedgehog/flatten-shape-geometry.git"
     },
     "keywords": [
         "shape",
@@ -20,9 +20,9 @@
     "author": "sugar_hengerhog",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/SugarHedgehog/shape-geometry/issues"
+        "url": "https://github.com/SugarHedgehog/flatten-shape-geometry/issues"
     },
-    "homepage": "https://github.com/SugarHedgehog/shape-geometry#readme",
+    "homepage": "https://github.com/SugarHedgehog/flatten-shape-geometry#readme",
     "dependencies": {
         "@flatten-js/core": "^1.0.0",
         "degrees-radians": "^1.0.0",
