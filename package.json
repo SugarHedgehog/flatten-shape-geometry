@@ -1,10 +1,10 @@
 {
     "name": "flatten-shape-geometry",
-    "version": "0.0.1",
+    "version": "0.0.5",
     "description": "A library for shape parameters and rendering in canvas.",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "build": "webpack"
     },
     "repository": {
         "type": "git",
@@ -25,8 +25,14 @@
     "homepage": "https://github.com/SugarHedgehog/flatten-shape-geometry#readme",
     "dependencies": {
         "@flatten-js/core": "^1.0.0",
+        "assert": "^2.1.0",
         "degrees-radians": "^1.0.0",
-        "radians-degrees": "^1.0.0",
-        "mathjs": "^9.0.0"
+        "mathjs": "^9.0.0",
+        "process": "^0.11.10",
+        "radians-degrees": "^1.0.0"
+    },
+    "devDependencies": {
+        "webpack": "^5.97.1",
+        "webpack-cli": "^6.0.1"
     }
 }
