@@ -85,6 +85,8 @@ import Angle from '../shape/Angle'
 
 export default class Triangle extends Shape {
     #isAngleInDegree;
+    connectionMatrix;
+    vertices;
     #pointA;
     #pointB;
     #pointC;
@@ -148,6 +150,7 @@ export default class Triangle extends Shape {
         }
 
         if (this.#pointA && this.#pointB && this.#pointC) {
+            this.vertices = [this.#pointA, this.#pointB, this.#pointC];
             this.#setAngles();
             if (calculateMedians) {
                 this.#calculateMedians();
