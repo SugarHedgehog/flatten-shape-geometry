@@ -1,5 +1,3 @@
 import Triangle from './src/shape/Triangle';
 
-export {
-    Triangle,
-};
+window.Triangle = Triangle;
