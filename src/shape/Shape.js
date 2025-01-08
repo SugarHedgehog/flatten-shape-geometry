@@ -1,17 +1,10 @@
 import { Point, Polygon } from '@flatten-js/core';
 
 export default class Shape extends Polygon {
-    connectionMatrix;
-    vertices;
-    constructor() {
-        const defaultPoints = [
-            new Point(0, 0),
-            new Point(1, 0),
-            new Point(1, 1),
-            new Point(0, 1)
-        ];
-        
-        super(defaultPoints);
+    connectionMatrix = [];
+    vertices = [];
+    constructor() {  
+        super();
     }
 
     addVertex(points, type) {
@@ -95,12 +88,4 @@ export default class Shape extends Polygon {
                 });
             });
         }
-
-    get area() {
-        return this.area();
-    }
-
-    get perimeter() {
-        return this.perimeter();
-    }
 }
