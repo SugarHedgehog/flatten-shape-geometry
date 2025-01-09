@@ -3,11 +3,11 @@ import { Point, Polygon } from '@flatten-js/core';
 export default class Shape extends Polygon {
     connectionMatrix = [];
     vertices = [];
-    constructor() {  
-        super();
+    constructor(...args) {  
+        super(...args);
     }
 
-    addVertex(points, type) {
+    addVertexToConnectionMatrix(points, type) {
             if (!Array.isArray(points)) {
                 points = [points];
             }
@@ -48,7 +48,7 @@ export default class Shape extends Polygon {
             }
         }
     
-        connectVertices(vertexPairs) {
+        connectVerticesInConnectionMatrix(vertexPairs) {
             if (!Array.isArray(vertexPairs[0])) {
                 vertexPairs = [vertexPairs];
             }
@@ -67,7 +67,7 @@ export default class Shape extends Polygon {
             });
         }
     
-        connectVerticesCyclic(vertexPairs) {
+        connectVerticesCyclicInConnectionMatrix(vertexPairs) {
             if (!Array.isArray(vertexPairs[0])) {
                 vertexPairs = [vertexPairs];
             }
