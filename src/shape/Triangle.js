@@ -4,6 +4,7 @@ import radiansToDegrees from 'radians-degrees';
 import { subtract, dot, multiply, add } from 'mathjs';
 import Shape from '../shape/Shape';
 import Angle from '../shape/Angle'
+import { isValidTriangle, calculateThirdSideUsingCosineLaw } from '../fuctions/general.js'
 
 /**
  * The constructor of the `Triangle` class initializes a triangle object using the provided parameters.
@@ -217,20 +218,12 @@ export default class Triangle extends Shape {
         [this.#pointA, this.#pointB, this.#pointC] = this._findTriangleVertices2D(side1, side2, side3);
     }
 
-    _isValidTriangle(a, b, c) {
-        return a > 0 && b > 0 && c > 0 && a + b > c && a + c > b && b + c > a;
-    }
-
     _findTriangleVertices2D(a, b, c) {
         const A = new Point(0, 0);
         const B = new Point(a, 0);
         const angleC = Math.acos((a * a + b * b - c * c) / (2 * a * b));
         const C = new Point(b * Math.cos(angleC), b * Math.sin(angleC));
         return [A, B, C];
-    }
-
-    _calculateThirdSideUsingCosineLaw(a, b, angle) {
-        return Math.sqrt(a * a + b * b - 2 * a * b * Math.cos(angle));
     }
 
     #setAngles() {
