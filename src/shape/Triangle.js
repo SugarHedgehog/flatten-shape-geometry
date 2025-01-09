@@ -111,8 +111,7 @@ export default class Triangle extends Shape {
     #angleCInRadians;
 
     constructor({ points = [], lengths = {}, angles = {}, supplementary = {} }) {
-        super(); // Call the constructor of the Polygon class
-        this.#isAngleInDegree = angles.angleInDegree || false;
+        const isAngleInDegree = angles.angleInDegree || false;
         const angleValues = angles.angle || {};
         const {
             calculateMedians = false,
@@ -121,37 +120,44 @@ export default class Triangle extends Shape {
             calculateMidlines = false
         } = supplementary;
 
-        this.connectionMatrix = [
+        const connectionMatrix = [
             [1],
             [1, 1],
         ];
 
         const { lengthAB, lengthBC, lengthCA } = lengths;
 
+        let pointA, pointB, pointC;
+
         switch (true) {
             case points && points.length === 3 && points.every(p => p.x !== undefined && p.y !== undefined):
-                const [pointA, pointB, pointC] = points.map(p => new Point(p.x, p.y));
-                this.#createFromPoints(pointA, pointB, pointC);
+                [pointA, pointB, pointC] = points.map(p => new Point(p.x, p.y));
                 break;
 
             case Object.keys(lengths).length == 3:
-                if (typeof lengthAB === 'number' && typeof lengthBC === 'number' && typeof lengthCA === 'number') {
-                    this.#createFromSideLengths(lengthAB, lengthBC, lengthCA);
+                if (!isValidTriangle(lengthAB, lengthBC, lengthCA) && typeof lengthAB === 'number' && typeof lengthBC === 'number' && typeof lengthCA === 'number') {
+                    [pointA, pointB, pointC] = Triangle._findTriangleVertices2D(lengthAB, lengthBC, lengthCA);
                 } else {
                     throw new TypeError(`Invalid lengths: Received lengths are ${JSON.stringify(lengths)}. Please provide three numeric side lengths.`);
                 }
                 break;
 
             case Object.keys(lengths).length == 2 && typeof angleValues === 'number':
-                this.#createFromTwoSidesAndAngle(lengths, angleValues);
+                [pointA, pointB, pointC] = Triangle._findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleValues, isAngleInDegree);
                 break;
 
             default:
                 throw new TypeError(`Invalid arguments: Received points ${JSON.stringify(points)}, lengths ${JSON.stringify(lengths)}, angleValues ${JSON.stringify(angleValues)}. Please provide either three Points, three side lengths, or two side lengths and one angle.`);
         }
 
-        if (this.#pointA && this.#pointB && this.#pointC) {
-            this.vertices = [this.#pointA, this.#pointB, this.#pointC];
+        if (pointA && pointB && pointC) {
+            super([pointA, pointB, pointC]);
+            this.#isAngleInDegree = isAngleInDegree;
+            this.connectionMatrix = connectionMatrix;
+            this.#pointA = pointA;
+            this.#pointB = pointB;
+            this.#pointC = pointC;
+            this.vertices = [pointA, pointB, pointC];
             this.#setAngles();
             if (calculateMedians) {
                 this.#calculateMedians();
@@ -170,24 +176,12 @@ export default class Triangle extends Shape {
         }
     }
 
-    #createFromPoints(pointA, pointB, pointC) {
-        this.#pointA = pointA;
-        this.#pointB = pointB;
-        this.#pointC = pointC;
-    }
-
-    #createFromSideLengths(sideAB, sideBC, sideCA) {
-        if (!this._isValidTriangle(sideAB, sideBC, sideCA)) {
-            throw new Error("Three sides do not form a triangle");
+    static _findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleBetween, isAngleInDegree) {
+        if (Object.keys(lengths).length !== 2 || angleBetween <= 0 || angleBetween >= (isAngleInDegree ? 180 : Math.PI)) {
+            throw new Error("Invalid input: Provide exactly two side lengths and an angle between 0 and 180 degrees or 0 and π radians.");
         }
-
-        [this.#pointA, this.#pointB, this.#pointC] = this._findTriangleVertices2D(sideAB, sideBC, sideCA);
-    }
-
-    #createFromTwoSidesAndAngle(lengths, angleBetween) {
         const { lengthAB, lengthBC, lengthCA } = lengths;
-
-        const angleRadians = this.#isAngleInDegree ? degreesToRadians(angleBetween) : angleBetween;
+        const angleRadians = isAngleInDegree ? degreesToRadians(angleBetween) : angleBetween;
 
         let side1, side2, side3;
 
@@ -195,33 +189,36 @@ export default class Triangle extends Shape {
             case (lengthAB > 0 && lengthBC > 0):
                 side1 = lengthAB;
                 side2 = lengthBC;
-                side3 = this._calculateThirdSideUsingCosineLaw(side1, side2, angleRadians);
+                side3 = calculateThirdSideUsingCosineLaw(side1, side2, angleRadians);
                 break;
             case (lengthBC > 0 && lengthCA > 0):
                 side1 = lengthBC;
                 side2 = lengthCA;
-                side3 = this._calculateThirdSideUsingCosineLaw(side1, side2, angleRadians);
+                side3 = calculateThirdSideUsingCosineLaw(side1, side2, angleRadians);
                 break;
             case (lengthCA > 0 && lengthAB > 0):
                 side1 = lengthCA;
                 side2 = lengthAB;
-                side3 = this._calculateThirdSideUsingCosineLaw(side1, side2, angleRadians);
+                side3 = calculateThirdSideUsingCosineLaw(side1, side2, angleRadians);
                 break;
             default:
                 throw new Error("Exactly two sides must be provided");
         }
 
-        if (!this._isValidTriangle(side1, side2, side3)) {
+        if (!isValidTriangle(side1, side2, side3)) {
             throw new Error("The given sides and angle do not form a valid triangle");
         }
 
-        [this.#pointA, this.#pointB, this.#pointC] = this._findTriangleVertices2D(side1, side2, side3);
+        return Triangle._findTriangleVertices2D(side1, side2, side3);
     }
 
     _findTriangleVertices2D(a, b, c) {
         const A = new Point(0, 0);
         const B = new Point(a, 0);
         const angleC = Math.acos((a * a + b * b - c * c) / (2 * a * b));
+        if (isNaN(angleC)) {
+            throw new Error("Invalid triangle sides: Cannot calculate angle.");
+        }
         const C = new Point(b * Math.cos(angleC), b * Math.sin(angleC));
         return [A, B, C];
     }
