@@ -541,6 +541,30 @@ export default class Triangle extends Shape {
         };
     }
 
+    get angleAInRadians() {
+        return this.#angleAInRadians;
+    }
+
+    get angleBInRadians() {
+        return this.#angleBInRadians;
+    }
+
+    get angleCInRadians() {
+        return this.#angleCInRadians;
+    }
+
+    get angleAInDegrees() {
+        return this.#angleAInDegrees;
+    }
+
+    get angleBInDegrees() {
+        return this.#angleBInDegrees;
+    }
+
+    get angleCInDegrees() {
+        return this.#angleCInDegrees;
+    }
+
     get pointA() {
         return this.#pointA.coordinates;
     }
