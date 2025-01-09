@@ -1,6 +1,6 @@
 {
     "name": "flatten-shape-geometry",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "A library for shape parameters and rendering in canvas.",
     "main": "index.js",
     "scripts": {
@@ -18,7 +18,7 @@
         "canvas"
     ],
     "author": "sugar_hengerhog",
-    "license": "MIT",
+    "license": "LGPL",
     "bugs": {
         "url": "https://github.com/SugarHedgehog/flatten-shape-geometry/issues"
     },
