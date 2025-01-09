@@ -91,6 +91,9 @@ export default class Triangle extends Shape {
     #pointA;
     #pointB;
     #pointC;
+    #lengthAB;
+    #lengthBC;
+    #lengthCA;
     #medianA;
     #medianB;
     #medianC;
@@ -135,7 +138,7 @@ export default class Triangle extends Shape {
                 break;
 
             case Object.keys(lengths).length == 3:
-                if (!isValidTriangle(lengthAB, lengthBC, lengthCA) && typeof lengthAB === 'number' && typeof lengthBC === 'number' && typeof lengthCA === 'number') {
+                if (isValidTriangle(lengthAB, lengthBC, lengthCA) && typeof lengthAB === 'number' && typeof lengthBC === 'number' && typeof lengthCA === 'number') {
                     [pointA, pointB, pointC] = Triangle._findTriangleVertices2D(lengthAB, lengthBC, lengthCA);
                 } else {
                     throw new TypeError(`Invalid lengths: Received lengths are ${JSON.stringify(lengths)}. Please provide three numeric side lengths.`);
@@ -157,6 +160,9 @@ export default class Triangle extends Shape {
             this.#pointA = pointA;
             this.#pointB = pointB;
             this.#pointC = pointC;
+            this.#lengthAB = new Segment(pointA, pointB).length;
+            this.#lengthBC = new Segment(pointB, pointC).length;
+            this.#lengthCA = new Segment(pointC, pointA).length;
             this.vertices = [pointA, pointB, pointC];
             this.#setAngles();
             if (calculateMedians) {
@@ -212,7 +218,7 @@ export default class Triangle extends Shape {
         return Triangle._findTriangleVertices2D(side1, side2, side3);
     }
 
-    _findTriangleVertices2D(a, b, c) {
+    static _findTriangleVertices2D(a, b, c) {
         const A = new Point(0, 0);
         const B = new Point(a, 0);
         const angleC = Math.acos((a * a + b * b - c * c) / (2 * a * b));
@@ -547,6 +553,26 @@ export default class Triangle extends Shape {
         return this.#pointC.coordinates;
     }
 
+    get lengthAB() {
+        return this.#lengthAB;
+    }
+
+    get lengthBC() {
+        return this.#lengthBC;
+    }
+
+    get lengthCA() {
+        return this.#lengthCA;
+    }
+
+    get lengths() {
+        return {
+            lengthAB: this.lengthAB,
+            lengthBC: this.lengthBC,
+            lengthCA: this.lengthCA
+        };
+    }
+
     get vertices() {
         return [this.#pointA, this.#pointB, this.#pointC];
     }
@@ -559,21 +585,24 @@ export default class Triangle extends Shape {
         this.connectionMatrix = connectionMatrix;
     }
 
+    get perimeter() {
+        return this.lengthAB + this.lengthBC + this.lengthCA;
+    }
+
     get semiperimeter() {
         return this.perimeter / 2;
     }
 
     get radiusOfCircumscribedCircle() {
-        const { lengthAB, lengthBC, lengthCA } = this;
-        const area = this.area;
+        const area = this.area();
         if (area === 0) {
             throw new Error("The area of the triangle is zero, circumradius cannot be calculated.");
         }
-        return (lengthAB * lengthBC * lengthCA) / (4 * area);
+        return (this.lengthAB * this.lengthBC * this.lengthCA) / (4 * area);
     }
 
     get radiusOfInscribedCircle() {
-        const area = this.area;
+        const area = this.area();
         const semiperimeter = this.semiperimeter;
         if (semiperimeter === 0) {
             throw new Error("The semiperimeter of the triangle is zero, inradius cannot be calculated.");
