@@ -138,7 +138,7 @@ export default class Triangle extends Shape {
                 break;
 
             case Object.keys(lengths).length == 3:
-                if (isValidTriangle(lengthAB, lengthBC, lengthCA) && typeof lengthAB === 'number' && typeof lengthBC === 'number' && typeof lengthCA === 'number') {
+                if (Number.isFinite(Number(lengthAB)) && Number.isFinite(Number(lengthBC)) && Number.isFinite(Number(lengthCA))) {
                     [pointA, pointB, pointC] = Triangle._findTriangleVertices2D(lengthAB, lengthBC, lengthCA);
                 } else {
                     throw new TypeError(`Invalid lengths: Received lengths are ${JSON.stringify(lengths)}. Please provide three numeric side lengths.`);
