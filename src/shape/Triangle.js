@@ -154,7 +154,8 @@ export default class Triangle extends Shape {
         }
 
         if (pointA && pointB && pointC) {
-            super([pointA, pointB, pointC]);
+            super();
+            this.addFace([pointA, pointB, pointC]);
             this.#isAngleInDegree = isAngleInDegree;
             this.connectionMatrix = connectionMatrix;
             this.#pointA = pointA;

@@ -3,8 +3,8 @@ import { Point, Polygon } from '@flatten-js/core';
 export default class Shape extends Polygon {
     connectionMatrix = [];
     vertices = [];
-    constructor(...args) {  
-        super(...args);
+    constructor() {  
+        super();
     }
 
     addVertexToConnectionMatrix(points, type) {
