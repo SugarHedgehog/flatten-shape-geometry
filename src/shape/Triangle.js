@@ -145,7 +145,7 @@ export default class Triangle extends Shape {
                 }
                 break;
 
-            case Object.keys(lengths).length == 2 && typeof angleValues === 'number':
+            case Object.keys(lengths).length == 2 && Number.isFinite(Number(angleValues)):
                 [pointA, pointB, pointC] = Triangle._findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleValues, isAngleInDegree);
                 break;
 
