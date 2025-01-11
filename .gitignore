@@ -92,3 +92,7 @@ public
 
 # Temporary files
 *.swp
+
+#Scripts
+dist/find-orphan-modules.js
+dist/stats.json

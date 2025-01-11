@@ -1,5 +1,6 @@
 const path = require('path'); // Подключаем встроенный модуль 'path' для работы с путями файлов
 const webpack = require('webpack'); // Подключаем 'webpack' для использования его функционала
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     entry: './index.js', // Указываем точку входа для приложения
@@ -21,5 +22,30 @@ module.exports = {
         new webpack.ProvidePlugin({
             process: 'process/browser', // Автоматически подключаем модуль 'process' для использования в коде
         }),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'disabled', // Отключаем автоматическое открытие браузера
+            generateStatsFile: true, // Генерируем файл stats.json
+            statsFilename: 'stats.json'
+        }),
     ],
+    module: {
+        rules: [
+            {
+                test: /\.js$/, // Применяем правило ко всем .js файлам
+                exclude: /node_modules/, // Исключаем папку node_modules
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [//автоматическое добавление необходимых полифиллов
+                            ['@babel/preset-env', {
+                                useBuiltIns: 'entry', // Используем полифиллы на основе импортов
+                                corejs: 3 // Указываем версию core-js
+                            }]
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+
 };
