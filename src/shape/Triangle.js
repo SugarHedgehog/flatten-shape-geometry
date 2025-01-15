@@ -598,10 +598,6 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         };
     }
 
-    get vertices() {
-        return [this.#pointA, this.#pointB, this.#pointC];
-    }
-
     get connectionMatrix() {
         return this.connectionMatrix;
     }
