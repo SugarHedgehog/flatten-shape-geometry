@@ -367,6 +367,18 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         return this.#heightC;
     }
 
+    get heightAPoint() {
+        return [this.#heightA.ps, this.#heightA.pe];
+    }
+
+    get heightBPoint() {
+        return [this.#heightB.ps, this.#heightB.pe];
+    }
+
+    get heightCPoint() {
+        return [this.#heightC.ps, this.#heightC.pe];
+    }
+
     get heightAEndPoint() {
         return this.#heightA.pe;
     }
