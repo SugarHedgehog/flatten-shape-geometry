@@ -271,34 +271,34 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     get medianAPoint() {
-        return [this.#medianA.start.coordinates, this.#medianA.end.coordinates];
+        return [this.#medianA.ps, this.#medianA.pe];
     }
 
     get medianBPoint() {
-        return [this.#medianB.start.coordinates, this.#medianB.end.coordinates];
+        return [this.#medianB.ps, this.#medianB.pe];
     }
 
     get medianCPoint() {
-        return [this.#medianC.start.coordinates, this.#medianC.end.coordinates];
+        return [this.#medianC.ps, this.#medianC.pe];
     }
 
     get medianAEndPoint() {
-        return this.#medianA.end.coordinates;
+        return this.#medianA.pe;
     }
 
     get medianBEndPoint() {
-        return this.#medianB.end.coordinates;
+        return this.#medianB.pe;
     }
 
     get medianCEndPoint() {
-        return this.#medianC.end.coordinates;
+        return this.#medianC.pe;
     }
 
     get medianEndPoints() {
         return {
-            medianAEndPoint: this.#medianA.end.coordinates,
-            medianBEndPoint: this.#medianB.end.coordinates,
-            medianCEndPoint: this.#medianC.end.coordinates
+            medianAEndPoint: this.#medianA.pe,
+            medianBEndPoint: this.#medianB.pe,
+            medianCEndPoint: this.#medianC.pe
         };
     }
 
@@ -381,9 +381,9 @@ export default class Triangle extends ShapeWithConnectionMatrix {
 
     get heightEndPoints() {
         return {
-            heightAEndPoint: this.#heightA.end.coordinates,
-            heightBEndPoint: this.#heightB.end.coordinates,
-            heightCEndPoint: this.#heightC.end.coordinates
+            heightAEndPoint: this.#heightA.pe,
+            heightBEndPoint: this.#heightB.pe,
+            heightCEndPoint: this.#heightC.pe
         };
     }
 
@@ -437,22 +437,22 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     get bisectorAEndPoint() {
-        return this.#bisectorA.end.coordinates;
+        return this.#bisectorA.pe;
     }
 
     get bisectorBEndPoint() {
-        return this.#bisectorB.end.coordinates;
+        return this.#bisectorB.pe;
     }
 
     get bisectorCEndPoint() {
-        return this.#bisectorC.end.coordinates;
+        return this.#bisectorC.pe;
     }
 
     get bisectorEndPoints() {
         return {
-            bisectorAEndPoint: this.#bisectorA.end.coordinates,
-            bisectorBEndPoint: this.#bisectorB.end.coordinates,
-            bisectorCEndPoint: this.#bisectorC.end.coordinates
+            bisectorAEndPoint: this.#bisectorA.pe,
+            bisectorBEndPoint: this.#bisectorB.pe,
+            bisectorCEndPoint: this.#bisectorC.pe
         };
     }
 
@@ -487,27 +487,27 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     get midlineABStartPoint() {
-        return this.#midlineAB.start.coordinates;
+        return this.#midlineAB.ps;
     }
 
     get midlineBCStartPoint() {
-        return this.#midlineBC.start.coordinates;
+        return this.#midlineBC.ps;
     }
 
     get midlineCAStartPoint() {
-        return this.#midlineCA.start.coordinates;
+        return this.#midlineCA.ps;
     }
 
     get midlineABEndPoint() {
-        return this.#midlineAB.end.coordinates;
+        return this.#midlineAB.pe;
     }
 
     get midlineBCEndPoint() {
-        return this.#midlineBC.end.coordinates;
+        return this.#midlineBC.pe;
     }
 
     get midlineCAEndPoint() {
-        return this.#midlineCA.end.coordinates;
+        return this.#midlineCA.pe;
     }
 
     get midlinePointsAB() {
