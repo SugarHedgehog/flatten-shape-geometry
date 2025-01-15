@@ -28,16 +28,16 @@ export default class ShapeWithConnectionMatrix extends Polygon {
                     this.connectionMatrix.push(new Array(this.connectionMatrix.length + 1).fill(0));
                     switch (typeABC) {
                         case 'A':
-                            this.connectVertices([0, this.connectionMatrix.length]);
+                            this.connectVerticesInConnectionMatrix([0, this.connectionMatrix.length]);
                             break;
                         case 'B':
-                            this.connectVertices([1, this.connectionMatrix.length]);
+                            this.connectVerticesInConnectionMatrix([1, this.connectionMatrix.length]);
                             break;
                         case 'C':
-                            this.connectVertices([2, this.connectionMatrix.length]);
+                            this.connectVerticesInConnectionMatrix([2, this.connectionMatrix.length]);
                             break;
                         case 'S':
-                            this.connectVertices([this.connectionMatrix.length, this.connectionMatrix.length - 1]);
+                            this.connectVerticesInConnectionMatrix([this.connectionMatrix.length, this.connectionMatrix.length - 1]);
                             break;
                         case 'E':
                             break;
@@ -84,7 +84,7 @@ export default class ShapeWithConnectionMatrix extends Polygon {
                     subArray.push(...pairs);
                 }
                 subArray.forEach(pair => {
-                    this.connectVertices(pair);
+                    this.connectVerticesInConnectionMatrix(pair);
                 });
             });
         }
