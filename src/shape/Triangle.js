@@ -448,6 +448,18 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         return this.#bisectorC;
     }
 
+    get bisectorAPoint() {
+        return [this.#bisectorA.ps, this.#bisectorA.pe];
+    }
+
+    get bisectorBPoint() {
+        return [this.#bisectorB.ps, this.#bisectorB.pe];
+    }
+
+    get bisectorCPoint() {
+        return [this.#bisectorC.ps, this.#bisectorC.pe];
+    }
+
     get bisectorAEndPoint() {
         return this.#bisectorA.pe;
     }
