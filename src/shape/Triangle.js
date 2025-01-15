@@ -567,15 +567,15 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     get pointA() {
-        return this.#pointA.coordinates;
+        return this.#pointA.vertices;
     }
 
     get pointB() {
-        return this.#pointB.coordinates;
+        return this.#pointB.vertices;
     }
 
     get pointC() {
-        return this.#pointC.coordinates;
+        return this.#pointC.vertices;
     }
 
     get lengthAB() {
