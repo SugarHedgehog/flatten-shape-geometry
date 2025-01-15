@@ -4,7 +4,7 @@ import radiansToDegrees from 'radians-degrees';
 import { subtract, dot, multiply, add } from 'mathjs';
 import ShapeWithConnectionMatrix from '../shape/Shape';
 import Angle from '../shape/Angle'
-import { isValidTriangle, calculateThirdSideUsingCosineLaw } from '../fuctions/general.js'
+import { isValidTriangle, calculateThirdSideUsingCosineLaw, findCircumcenter2D} from '../fuctions/general.js'
 
 /**
  * The constructor of the `Triangle` class initializes a triangle object using the provided parameters.
@@ -227,7 +227,9 @@ export default class Triangle extends ShapeWithConnectionMatrix {
             throw new Error("Invalid triangle sides: Cannot calculate angle.");
         }
         const C = new Point(b * Math.cos(angleC), b * Math.sin(angleC));
-        return [A, B, C];
+
+        let circumcenter = findCircumcenter2D(A, B, C);
+        return [A, B, C].map(vertex => shiftCoordinate2D(vertex, circumcenter));
     }
 
     #setAngles() {
