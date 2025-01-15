@@ -4,7 +4,7 @@ import radiansToDegrees from 'radians-degrees';
 import { subtract, dot, multiply, add } from 'mathjs';
 import ShapeWithConnectionMatrix from '../shape/Shape';
 import Angle from '../shape/Angle'
-import { isValidTriangle, calculateThirdSideUsingCosineLaw, findCircumcenter2D} from '../fuctions/general.js'
+import { isValidTriangle, calculateThirdSideUsingCosineLaw, findCircumcenter2D, shiftCoordinate2D} from '../fuctions/general.js'
 
 /**
  * The constructor of the `Triangle` class initializes a triangle object using the provided parameters.
