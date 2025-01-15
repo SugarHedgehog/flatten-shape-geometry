@@ -1,6 +1,6 @@
-import { Point, Polygon } from '@flatten-js/core';
+import {Polygon } from '@flatten-js/core';
 
-export default class Shape extends Polygon {
+export default class ShapeWithConnectionMatrix extends Polygon {
     connectionMatrix = [];
     vertices = [];
     constructor() {  

@@ -2,7 +2,7 @@ import { Point, Segment } from '@flatten-js/core';
 import degreesToRadians from 'degrees-radians';
 import radiansToDegrees from 'radians-degrees';
 import { subtract, dot, multiply, add } from 'mathjs';
-import Shape from '../shape/Shape';
+import ShapeWithConnectionMatrix from '../shape/Shape';
 import Angle from '../shape/Angle'
 import { isValidTriangle, calculateThirdSideUsingCosineLaw } from '../fuctions/general.js'
 
@@ -84,7 +84,7 @@ import { isValidTriangle, calculateThirdSideUsingCosineLaw } from '../fuctions/g
  * - `area`: returns the area of the triangle.
  */
 
-export default class Triangle extends Shape {
+export default class Triangle extends ShapeWithConnectionMatrix {
     #isAngleInDegree;
     connectionMatrix;
     vertices;
@@ -368,15 +368,15 @@ export default class Triangle extends Shape {
     }
 
     get heightAEndPoint() {
-        return this.#heightA.end.coordinates;
+        return this.#heightA.pe;
     }
 
     get heightBEndPoint() {
-        return this.#heightB.end.coordinates;
+        return this.#heightB.pe;
     }
 
     get heightCEndPoint() {
-        return this.#heightC.end.coordinates;
+        return this.#heightC.pe;
     }
 
     get heightEndPoints() {
