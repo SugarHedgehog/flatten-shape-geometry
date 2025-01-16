@@ -1,4 +1,4 @@
-import { isValidTriangle } from './src/functions/general.js';
+import { isValidTriangle } from '../src/functions/general.js';
 
 describe('isValidTriangle', () => {
     test('should return true for a valid triangle', () => {
