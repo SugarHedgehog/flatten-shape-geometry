@@ -231,8 +231,7 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         const C = new Point(b * Math.cos(angleC), b * Math.sin(angleC));
 
         let circumcenter = findCircumcenter2D(A, B, C);
-        [A, B, C] = [A, B, C].map(vertex => shiftCoordinate2D(vertex, circumcenter));
-        return [A, B, C];
+        return [A, B, C].map(vertex => shiftCoordinate2D(vertex, circumcenter));
     }
 
     #setAngles() {
