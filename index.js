@@ -1,6 +1,6 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import {isValidTriangle, calculateThirdSideUsingCosineLaw} from './src/fuctions/general' 
+import {isValidTriangle, calculateThirdSideUsingCosineLaw} from './src/functions/general' 
 import Angle from './src/shape/Angle';
 import Triangle from './src/shape/Triangle';
 

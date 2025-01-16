@@ -4,7 +4,7 @@ import radiansToDegrees from 'radians-degrees';
 import { subtract, dot, multiply, add } from 'mathjs';
 import ShapeWithConnectionMatrix from '../shape/Shape';
 import Angle from '../shape/Angle'
-import { isValidTriangle, calculateThirdSideUsingCosineLaw, findCircumcenter2D, shiftCoordinate2D} from '../fuctions/general.js'
+import { isValidTriangle, calculateThirdSideUsingCosineLaw, findCircumcenter2D, shiftCoordinate2D} from '../functions/general.js'
 
 /**
  * Represents a Triangle with various properties and methods to calculate its characteristics.
