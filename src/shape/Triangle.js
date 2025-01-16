@@ -234,9 +234,9 @@ export default class Triangle extends ShapeWithConnectionMatrix {
 
     #setAngles() {
         if (this.#isAngleInDegree) {
-            this.#angleAInDegrees = new Angle(this.#pointB, this.#pointA, this.#pointC).angleInDegreesangle % 180;
-            this.#angleBInDegrees = new Angle(this.#pointA, this.#pointB, this.#pointC).angleInDegrees % 180;
-            this.#angleCInDegrees = new Angle(this.#pointA, this.#pointC, this.#pointB).angleInDegrees % 180;
+            this.#angleAInDegrees = new Angle(this.#pointB, this.#pointA, this.#pointC).angleInDegrees;
+            this.#angleBInDegrees = new Angle(this.#pointA, this.#pointB, this.#pointC).angleInDegrees;
+            this.#angleCInDegrees = new Angle(this.#pointA, this.#pointC, this.#pointB).angleInDegrees;
             this.#angleAInRadians = degreesToRadians(this.#angleAInDegrees);
             this.#angleBInRadians = degreesToRadians(this.#angleBInDegrees);
             this.#angleCInRadians = degreesToRadians(this.#angleCInDegrees);
@@ -244,9 +244,9 @@ export default class Triangle extends ShapeWithConnectionMatrix {
             this.#angleAInRadians = new Angle(this.#pointB, this.#pointA, this.#pointC).angleInRadians;
             this.#angleBInRadians = new Angle(this.#pointA, this.#pointB, this.#pointC).angleInRadians;
             this.#angleCInRadians = new Angle(this.#pointA, this.#pointC, this.#pointB).angleInRadians;
-            this.#angleAInDegrees = radiansToDegrees(this.#angleAInRadians) % 180;
-            this.#angleBInDegrees = radiansToDegrees(this.#angleBInRadians) % 180;
-            this.#angleCInDegrees = radiansToDegrees(this.#angleCInRadians) % 180;
+            this.#angleAInDegrees = radiansToDegrees(this.#angleAInRadians);
+            this.#angleBInDegrees = radiansToDegrees(this.#angleBInRadians);
+            this.#angleCInDegrees = radiansToDegrees(this.#angleCInRadians);
         }
     }
 
