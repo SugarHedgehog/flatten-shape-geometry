@@ -1,6 +1,6 @@
 {
     "name": "flatten-shape-geometry",
-    "version": "0.0.94",
+    "version": "0.0.95",
     "description": "A library for shape parameters and rendering in canvas.",
     "main": "index.js",
     "scripts": {
