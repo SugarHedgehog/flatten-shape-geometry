@@ -7,81 +7,46 @@ import Angle from '../shape/Angle'
 import { isValidTriangle, calculateThirdSideUsingCosineLaw, findCircumcenter2D, shiftCoordinate2D} from '../fuctions/general.js'
 
 /**
- * The constructor of the `Triangle` class initializes a triangle object using the provided parameters.
+ * Represents a Triangle with various properties and methods to calculate its characteristics.
  * 
- * The constructor supports three ways to create a triangle:
+ * The `Triangle` class can be instantiated using different sets of parameters:
  * 
- * 1) By the coordinates of the triangle's vertices - you need to provide `points: [{x,y}, {x,y}, {x,y}]`.
+ * 1) By the coordinates of the triangle's vertices: `points: [{x,y}, {x,y}, {x,y}]`.
+ * 2) By its three sides: `lengths: {lengthAB, lengthBC, lengthCA}`.
+ * 3) By two sides and an angle: `lengths: {lengthAB, lengthBC}`, `angles: {angle: {angleA, angleB, angleC}}`.
  * 
- * 2) By its three sides - you need to provide `lengths: {lengthAB, lengthBC, lengthCA}`.
+ * @param {Object} params - Parameters for creating a triangle.
+ * @param {Array} params.points - Array of three `Point` objects representing the vertices.
+ * @param {Object} params.lengths - Object containing the lengths of the triangle's sides.
+ * @param {Object} params.angles - Object containing the angles of the triangle and a flag for angle units.
+ * @param {Object} params.supplementary - Flags for calculating additional triangle characteristics.
  * 
- * 3) By two sides and an angle - you need to provide any two sides of the triangle and the angle between them, for example, `lengths: {lengthAB, lengthBC}`, `angles: {angle: {angleA, angleB, angleC}}`.
- *  
- * @param {Object} params - An object with parameters for creating a triangle.
- * @param {Array} params.points - An array of three `Point` objects representing the vertices of the triangle with `x` and `y` coordinates.
+ * Methods:
+ * - `#createFromPoints(pointA, pointB, pointC)`: Creates a triangle from three points.
+ * - `#createFromSideLengths(sideAB, sideBC, sideCA)`: Creates a triangle from three side lengths.
+ * - `#createFromTwoSidesAndAngle(lengths, angleBetween)`: Creates a triangle from two sides and the angle between them.
+ * - `#setAngles()`: Sets the angles of the triangle in radians and degrees.
+ * - `#calculateMedians()`: Calculates the medians of the triangle.
+ * - `#calculateHeights()`: Calculates the heights of the triangle.
+ * - `#calculateBisectors()`: Calculates the bisectors of the triangle.
+ * - `#calculateMidlines()`: Calculates the midlines of the triangle.
  * 
- * @param {Object} params.lengths - An object containing the lengths of the triangle's sides.
- * @param {number} params.lengths.lengthAB - Length of side AB.
- * @param {number} params.lengths.lengthBC - Length of side BC.
- * @param {number} params.lengths.lengthCA - Length of side CA.
- * 
- * @param {Object} params.angles - An object containing the angles of the triangle and a flag indicating whether the angles are in radians or degrees `angle: {angleA, angleB, angleC}`.
- * @param {number} params.angles.angleA - Angle A.
- * @param {number} params.angles.angleB - Angle B.
- * @param {number} params.angles.angleC - Angle C.
- * @param {boolean} params.angles.angleInDegree - A flag indicating whether the angles are in degrees. If `true`, the angles will be converted to radians.
- * 
- * @param {Object} params.supplementary - An object with flags for calculating additional characteristics of the triangle.
- * @param {boolean} params.supplementary.calculateMedians - Flag for calculating the medians of the triangle.
- * @param {boolean} params.supplementary.calculateHeights - Flag for calculating the heights of the triangle.
- * @param {boolean} params.supplementary.calculateBisectors - Flag for calculating the bisectors of the triangle.
- * @param {boolean} params.supplementary.calculateMidlines - Flag for calculating the midlines of the triangle.
- * 
- * Class methods:
- * - `#createFromPoints(pointA, pointB, pointC)`: creates a triangle from three points.
- * - `#createFromSideLengths(sideAB, sideBC, sideCA)`: creates a triangle from three side lengths.
- * - `#createFromTwoSidesAndAngle(lengths, angleBetween)`: creates a triangle from two sides and the angle between them.
- * - `#setAngles()`: sets the angles of the triangle in radians and degrees.
- * - `addVertex(points, type)`: adds a vertex to the triangle.
- * - `connectVertices(vertexPairs)`: connects the vertices of the triangle.
- * - `connectVerticesCyclic(vertexPairs)`: cyclically connects the vertices of the triangle.
- * - `#calculateMedians()`: calculates the medians of the triangle.
- * - `#calculateHeights()`: calculates the heights of the triangle.
- * - `#calculateBisectors()`: calculates the bisectors of the triangle.
- * - `#calculateMidlines()`: calculates the midlines of the triangle.
- * 
- * Class getters:
- * 
- * - `medianA`, `medianB`, `medianC`: return the medians of the triangle as `Segment` objects.
- * - `medianAPoint`, `medianBPoint`, `medianCPoint`: return the coordinates of the start and end points of the medians.
- * - `medianAEndPoint`, `medianBEndPoint`, `medianCEndPoint`: return the coordinates of the end points of the medians.
- * - `medianEndPoints`: returns an object with the coordinates of the end points of all medians.
- * - `medianALength`, `medianBLength`, `medianCLength`: return the lengths of the medians.
- * - `medianLengths`: returns an object with the lengths of all medians.
- * 
- * - `heightA`, `heightB`, `heightC`: return the heights of the triangle as `Segment` objects.
- * - `heightAEndPoint`, `heightBEndPoint`, `heightCEndPoint`: return the coordinates of the end points of the heights.
- * - `heightEndPoints`: returns an object with the coordinates of the end points of all heights.
- * - `heightALength`, `heightBLength`, `heightCLength`: return the lengths of the heights.
- * - `heightLengths`: returns an object with the lengths of all heights.
- * 
- * - `bisectorA`, `bisectorB`, `bisectorC`: return the bisectors of the triangle as `Segment` objects.
- * - `bisectorAEndPoint`, `bisectorBEndPoint`, `bisectorCEndPoint`: return the coordinates of the end points of the bisectors.
- * - `bisectorEndPoints`: returns an object with the coordinates of the end points of all bisectors.
- * - `bisectorALength`, `bisectorBLength`, `bisectorCLength`: return the lengths of the bisectors.
- * - `bisectorLengths`: returns an object with the lengths of all bisectors.
- * 
- * - `midlineABStartPoint`, `midlineBCStartPoint`, `midlineCAStartPoint`: return the coordinates of the start points of the midlines.
- * - `midlineABEndPoint`, `midlineBCEndPoint`, `midlineCAEndPoint`: return the coordinates of the end points of the midlines.
- * - `midlinePointsAB`, `midlinePointsBC`, `midlinePointsCA`: return arrays with the coordinates of the start and end points of the midlines.
- * - `midlineABLength`, `midlineBCLength`, `midlineCALength`: return the lengths of the midlines.
- * - `midlineLengths`: returns an object with the lengths of all midlines.
- * 
- * - `pointA`, `pointB`, `pointC`: return the coordinates of the triangle's vertices.
- * - `vertices`: returns an array with `Point` objects representing the vertices of the triangle.
- * 
- * - `perimeter`: returns the perimeter of the triangle.
- * - `area`: returns the area of the triangle.
+ * Getters:
+ * - `medianA`, `medianB`, `medianC`: Return the medians as `Segment` objects.
+ * - `heightA`, `heightB`, `heightC`: Return the heights as `Segment` objects.
+ * - `bisectorA`, `bisectorB`, `bisectorC`: Return the bisectors as `Segment` objects.
+ * - `midlineABStartPoint`, `midlineBCStartPoint`, `midlineCAStartPoint`: Return start points of the midlines.
+ * - `midlineABEndPoint`, `midlineBCEndPoint`, `midlineCAEndPoint`: Return end points of the midlines.
+ * - `angleAInRadians`, `angleBInRadians`, `angleCInRadians`: Return angles in radians.
+ * - `angleAInDegrees`, `angleBInDegrees`, `angleCInDegrees`: Return angles in degrees.
+ * - `pointA`, `pointB`, `pointC`: Return the coordinates of the vertices.
+ * - `lengthAB`, `lengthBC`, `lengthCA`: Return the lengths of the sides.
+ * - `perimeter`: Returns the perimeter of the triangle.
+ * - `radiusOfCircumscribedCircle`: Returns the circumradius.
+ * - `radiusOfInscribedCircle`: Returns the inradius.
+ * - `sinA`, `cosA`, `tgA`, `ctgA`: Trigonometric functions for angle A.
+ * - `sinB`, `cosB`, `tgB`, `ctgB`: Trigonometric functions for angle B.
+ * - `sinC`, `cosC`, `tgC`, `ctgC`: Trigonometric functions for angle C.
  */
 
 export default class Triangle extends ShapeWithConnectionMatrix {
