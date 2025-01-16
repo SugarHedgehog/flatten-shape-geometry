@@ -23,7 +23,7 @@ export default class Angle {
             default:
                 throw new Error("Invalid arguments: Please provide either three Points, two Segments, two Vectors, or two side lengths and an angle. Check the types and number of inputs.");
         }
-        this.#angleInRadians = this.#vector1.angleTo(this.#vector2);
+        this.#angleInRadians = Math.min(this.#vector1.angleTo(this.#vector2), this.#vector2.angleTo(this.#vector1));
     }
     
     _createFromPoints(p1, p2, p3) {
