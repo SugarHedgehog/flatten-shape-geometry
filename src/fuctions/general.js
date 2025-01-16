@@ -21,28 +21,14 @@ export function findCircumcenter2D(A, B, C) {
         throw new TypeError("Arguments must be instances of Point");
     }
 
+    // Calculate the circumcenter in 2D
     const D = 2 * (A.x * (B.y - C.y) + B.x * (C.y - A.y) + C.x * (A.y - B.y));
     if (D === 0) {
         throw new Error("The points are collinear, circumcenter cannot be determined.");
     }
 
-    const a = matrix([
-        [A.x, A.y, 1],
-        [B.x, B.y, 1],
-        [C.x, C.y, 1]
-    ]);
-
-    const b = matrix([
-        [A.x * A.x + A.y * A.y],
-        [B.x * B.x + B.y * B.y],
-        [C.x * C.x + C.y * C.y]
-    ]);
-
-    const aInv = inv(a);
-    const result = multiply(aInv, b);
-
-    const Ux = result.get([0, 0]);
-    const Uy = result.get([1, 0]);
+    const Ux = (1 / D) * ((A.x * A.x + A.y * A.y) * (B.y - C.y) + (B.x * B.x + B.y * B.y) * (C.y - A.y) + (C.x * C.x + C.y * C.y) * (A.y - B.y));
+    const Uy = (1 / D) * ((A.x * A.x + A.y * A.y) * (C.x - B.x) + (B.x * B.x + B.y * B.y) * (A.x - C.x) + (C.x * C.x + C.y * C.y) * (B.x - A.x));
 
     return new Point(Ux, Uy);
 }

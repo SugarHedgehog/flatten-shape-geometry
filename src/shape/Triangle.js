@@ -135,6 +135,8 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         switch (true) {
             case points && points.length === 3 && points.every(p => p.x !== undefined && p.y !== undefined):
                 [pointA, pointB, pointC] = points.map(p => new Point(p.x, p.y));
+                let circumcenter = findCircumcenter2D(pointA, pointB, pointC);
+                [pointA, pointB, pointC] = [pointA, pointB, pointC].map(vertex => shiftCoordinate2D(vertex, circumcenter));
                 break;
 
             case Object.keys(lengths).length == 3:
@@ -229,7 +231,8 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         const C = new Point(b * Math.cos(angleC), b * Math.sin(angleC));
 
         let circumcenter = findCircumcenter2D(A, B, C);
-        return [A, B, C].map(vertex => shiftCoordinate2D(vertex, circumcenter));
+        [A, B, C] = [A, B, C].map(vertex => shiftCoordinate2D(vertex, circumcenter));
+        return [A, B, C];
     }
 
     #setAngles() {
