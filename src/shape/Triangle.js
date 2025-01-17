@@ -79,7 +79,8 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     #angleCInRadians;
 
     constructor({ points = [], lengths = {}, angles = {}, supplementary = {} }) {
-        const isAngleInDegree = angles.angleInDegree || false;
+        super();
+        this.#isAngleInDegree = angles.angleInDegree || false;
         const angleValues = angles.angle || {};
         const {
             calculateMedians = false,
@@ -88,50 +89,45 @@ export default class Triangle extends ShapeWithConnectionMatrix {
             calculateMidlines = false
         } = supplementary;
 
-        const connectionMatrix = [
+        this.connectionMatrix = [
             [1],
             [1, 1],
         ];
 
         const { lengthAB, lengthBC, lengthCA } = lengths;
 
-        let pointA, pointB, pointC;
-
         switch (true) {
             case points && points.length === 3 && points.every(p => p.x !== undefined && p.y !== undefined):
-                [pointA, pointB, pointC] = points.map(p => new Point(p.x, p.y));
-                let circumcenter = findCircumcenter2D(pointA, pointB, pointC);
-                [pointA, pointB, pointC] = [pointA, pointB, pointC].map(vertex => shiftCoordinate2D(vertex, circumcenter));
+                [this.#pointA, this.#pointB, this.#pointC] = points.map(p => new Point(p.x, p.y));
+                [this.#pointA, this.#pointB, this.#pointC] = this.findTriangleVertices2D(
+                    this.#pointA.distanceTo(this.#pointB),
+                    this.#pointB.distanceTo(this.#pointC),
+                    this.#pointC.distanceTo(this.#pointA)
+                );
                 break;
 
             case Object.keys(lengths).length == 3:
                 if (Number.isFinite(Number(lengthAB)) && Number.isFinite(Number(lengthBC)) && Number.isFinite(Number(lengthCA))) {
-                    [pointA, pointB, pointC] = Triangle._findTriangleVertices2D(lengthAB, lengthBC, lengthCA);
+                    [this.#pointA, this.#pointB, this.#pointC] = this.findTriangleVertices2D(lengthAB, lengthBC, lengthCA);
                 } else {
                     throw new TypeError(`Invalid lengths: Received lengths are ${JSON.stringify(lengths)}. Please provide three numeric side lengths.`);
                 }
                 break;
 
             case Object.keys(lengths).length == 2 && Number.isFinite(Number(angleValues)):
-                [pointA, pointB, pointC] = Triangle._findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleValues, isAngleInDegree);
+                [this.#pointA, this.#pointB, this.#pointC] = this.findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleValues, this.#isAngleInDegree);
                 break;
 
             default:
                 throw new TypeError(`Invalid arguments: Received points ${JSON.stringify(points)}, lengths ${JSON.stringify(lengths)}, angleValues ${JSON.stringify(angleValues)}. Please provide either three Points, three side lengths, or two side lengths and one angle.`);
         }
 
-        if (pointA && pointB && pointC) {
-            super();
-            this.addFace([pointA, pointB, pointC]);
-            this.#isAngleInDegree = isAngleInDegree;
-            this.connectionMatrix = connectionMatrix;
-            this.#pointA = pointA;
-            this.#pointB = pointB;
-            this.#pointC = pointC;
-            this.#lengthAB = new Segment(pointA, pointB).length;
-            this.#lengthBC = new Segment(pointB, pointC).length;
-            this.#lengthCA = new Segment(pointC, pointA).length;
-            this.vertices = [pointA, pointB, pointC];
+        if (this.#pointA && this.#pointB && this.#pointC) {
+            this.addFace([this.#pointA, this.#pointB, this.#pointC]);
+            this.#lengthAB = new Segment(this.#pointA, this.#pointB).length;
+            this.#lengthBC = new Segment(this.#pointB, this.#pointC).length;
+            this.#lengthCA = new Segment(this.#pointC, this.#pointA).length;
+            this.vertices = [this.#pointA, this.#pointB, this.#pointC];
             this.#setAngles();
             if (calculateMedians) {
                 this.#calculateMedians();
@@ -150,7 +146,7 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         }
     }
 
-    static _findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleBetween, isAngleInDegree) {
+    findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleBetween, isAngleInDegree) {
         if (Object.keys(lengths).length !== 2 || angleBetween <= 0 || angleBetween >= (isAngleInDegree ? 180 : Math.PI)) {
             throw new Error("Invalid input: Provide exactly two side lengths and an angle between 0 and 180 degrees or 0 and π radians.");
         }
@@ -183,10 +179,10 @@ export default class Triangle extends ShapeWithConnectionMatrix {
             throw new Error("The given sides and angle do not form a valid triangle");
         }
 
-        return Triangle._findTriangleVertices2D(side1, side2, side3);
+        return this.findTriangleVertices2D(side1, side2, side3);
     }
 
-    static _findTriangleVertices2D(a, b, c) {
+    findTriangleVertices2D(a, b, c) {
         const A = new Point(0, 0);
         const B = new Point(a, 0);
         const angleC = Math.acos((a * a + b * b - c * c) / (2 * a * b));
