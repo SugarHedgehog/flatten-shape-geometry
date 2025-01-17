@@ -4,7 +4,7 @@ import radiansToDegrees from 'radians-degrees';
 import { subtract, dot, multiply, add } from 'mathjs';
 import ShapeWithConnectionMatrix from '../shape/Shape';
 import Angle from '../shape/Angle'
-import { isValidTriangle, calculateThirdSideUsingCosineLaw, findCircumcenter2D, shiftCoordinate2D} from '../functions/general.js'
+import { isValidTriangle, calculateThirdSideUsingCosineLaw, findCircumcenter2D, shiftCoordinate2D } from '../functions/general.js'
 
 /**
  * Represents a Triangle with various properties and methods to calculate its characteristics.
@@ -236,34 +236,34 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     get medianAPoint() {
-        return [this.#medianA.ps, this.#medianA.pe];
+        return [this.medianA.ps, this.medianA.pe];
     }
 
     get medianBPoint() {
-        return [this.#medianB.ps, this.#medianB.pe];
+        return [this.medianB.ps, this.medianB.pe];
     }
 
     get medianCPoint() {
-        return [this.#medianC.ps, this.#medianC.pe];
+        return [this.medianC.ps, this.medianC.pe];
     }
 
     get medianAEndPoint() {
-        return this.#medianA.pe;
+        return this.medianA.pe;
     }
 
     get medianBEndPoint() {
-        return this.#medianB.pe;
+        return this.medianB.pe;
     }
 
     get medianCEndPoint() {
-        return this.#medianC.pe;
+        return this.medianC.pe;
     }
 
     get medianEndPoints() {
         return {
-            medianAEndPoint: this.#medianA.pe,
-            medianBEndPoint: this.#medianB.pe,
-            medianCEndPoint: this.#medianC.pe
+            medianAEndPoint: this.medianAEndPoint,
+            medianBEndPoint: this.medianBEndPoint,
+            medianCEndPoint: this.medianCEndPoint
         };
     }
 
