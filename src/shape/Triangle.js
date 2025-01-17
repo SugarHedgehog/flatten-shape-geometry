@@ -97,18 +97,14 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         const { lengthAB, lengthBC, lengthCA } = lengths;
 
         switch (true) {
-            case points && points.length === 3 && points.every(p => p.x !== undefined && p.y !== undefined):
-                [this.#pointA, this.#pointB, this.#pointC] = points.map(p => new Point(p.x, p.y));
-                [this.#pointA, this.#pointB, this.#pointC] = this.findTriangleVertices2D(
-                    this.#pointA.distanceTo(this.#pointB),
-                    this.#pointB.distanceTo(this.#pointC),
-                    this.#pointC.distanceTo(this.#pointA)
-                );
+            case points && points.length === 3 && points.every(p => Number.isFinite(p.x) && Number.isFinite(p.y)):                [this.#pointA, this.#pointB, this.#pointC] = points.map(p => new Point(p.x, p.y));
+                let circumcenter = findCircumcenter2D(this.#pointA, this.#pointB, this.#pointC);
+                [this.#pointA, this.#pointB, this.#pointC] = [this.#pointA, this.#pointB, this.#pointC].map(vertex => shiftCoordinate2D(vertex, circumcenter));
                 break;
 
             case Object.keys(lengths).length == 3:
                 if (Number.isFinite(Number(lengthAB)) && Number.isFinite(Number(lengthBC)) && Number.isFinite(Number(lengthCA))) {
-                    [this.#pointA, this.#pointB, this.#pointC] = this.findTriangleVertices2D(lengthAB, lengthBC, lengthCA);
+                    [this.#pointA, this.#pointB, this.#pointC] = this.findTriangleVertices2D(lengthAB, lengthCA, lengthBC);
                 } else {
                     throw new TypeError(`Invalid lengths: Received lengths are ${JSON.stringify(lengths)}. Please provide three numeric side lengths.`);
                 }
@@ -162,14 +158,14 @@ export default class Triangle extends ShapeWithConnectionMatrix {
                 side3 = calculateThirdSideUsingCosineLaw(side1, side2, angleRadians);
                 break;
             case (lengthBC > 0 && lengthCA > 0):
-                side1 = lengthBC;
-                side2 = lengthCA;
-                side3 = calculateThirdSideUsingCosineLaw(side1, side2, angleRadians);
+                side2 = lengthBC;
+                side3 = lengthCA;
+                side1 = calculateThirdSideUsingCosineLaw(side2, side3, angleRadians);
                 break;
             case (lengthCA > 0 && lengthAB > 0):
-                side1 = lengthCA;
-                side2 = lengthAB;
-                side3 = calculateThirdSideUsingCosineLaw(side1, side2, angleRadians);
+                side1 = lengthAB;
+                side3 = lengthCA;
+                side2 = calculateThirdSideUsingCosineLaw(side1, side3, angleRadians);
                 break;
             default:
                 throw new Error("Exactly two sides must be provided");
@@ -179,7 +175,7 @@ export default class Triangle extends ShapeWithConnectionMatrix {
             throw new Error("The given sides and angle do not form a valid triangle");
         }
 
-        return this.findTriangleVertices2D(side1, side2, side3);
+        return this.findTriangleVertices2D(side1,side3, side2);
     }
 
     findTriangleVertices2D(a, b, c) {
