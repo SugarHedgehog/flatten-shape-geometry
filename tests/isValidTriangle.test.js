@@ -16,7 +16,7 @@ describe('isValidTriangle', () => {
         expect(isValidTriangle(5, 1, 1)).toBe(false);
     });
 
-    test('should return true for edge case of a degenerate triangle', () => {
+    test('should return false for edge case of a degenerate triangle', () => {
         expect(isValidTriangle(1, 1, 2)).toBe(false);
     });
 
