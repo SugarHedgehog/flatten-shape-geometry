@@ -21,6 +21,24 @@ export function isValidTriangle(a, b, c) {
  * @returns {number} The length of the third side.
  */
 export function calculateThirdSideUsingCosineLaw(a, b, angle) {
+    if (!Number.isFinite(a)) {
+        throw new Error('Parameter "a" must be a finite number');
+    }
+    if (!Number.isFinite(b)) {
+        throw new Error('Parameter "b" must be a finite number');
+    }
+    if (!Number.isFinite(angle)) {
+        throw new Error('Parameter "angle" must be a finite number');
+    }
+    if (a < 0) {
+        throw new Error('Side length "a" must be non-negative');
+    }
+    if (b < 0) {
+        throw new Error('Side length "b" must be non-negative');
+    }
+    if (angle < 0 || angle > Math.PI) {
+        throw new Error('Angle must be between 0 and π radians');
+    }
     return Math.sqrt(a * a + b * b - 2 * a * b * Math.cos(angle));
 }
 
