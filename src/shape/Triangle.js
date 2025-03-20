@@ -263,6 +263,10 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         };
     }
 
+    get medianIntersectionPoint() {
+        return this.#medianA.intersect(this.#medianB)[0];
+    }
+
     get medianALength() {
         return this.#medianA.length;
     }
@@ -360,6 +364,10 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         };
     }
 
+    get heightIntersectionPoint() {
+        return this.#heightA.intersect(this.#heightB)[0];
+    }
+
     get heightALength() {
         return this.#heightA.length;
     }
@@ -439,6 +447,10 @@ export default class Triangle extends ShapeWithConnectionMatrix {
             bisectorBEndPoint: this.#bisectorB.pe,
             bisectorCEndPoint: this.#bisectorC.pe
         };
+    }
+
+    get bisectorIntersectionPoint() {
+        return this.#bisectorA.intersect(this.#bisectorB)[0];
     }
 
     get bisectorALength() {
