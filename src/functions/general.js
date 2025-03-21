@@ -13,6 +13,19 @@ export function isValidTriangle(a, b, c) {
 }
 
 /**
+ * Checks if four given side lengths can form a valid quadrilateral.
+ * 
+ * @param {number} a - The length of the first side.
+ * @param {number} b - The length of the second side.
+ * @param {number} c - The length of the third side.
+ * @param {number} d - The length of the firt side.
+ * @returns {boolean} True if the sides form a valid quadrilateral, false otherwise.
+ */
+export function isValidQuadrilateral(a, b, c, d) {
+    return Math.abs(a - b) <= c + d && a > 0 && b > 0 && c > 0 && d > 0;
+}
+
+/**
  * Calculates the third side of a triangle using the cosine law.
  * 
  * @param {number} a - The length of the first side.
