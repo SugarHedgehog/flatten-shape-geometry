@@ -1,3 +1,4 @@
+import { Segment } from '@flatten-js/core';
 import ShapeWithConnectionMatrix from '../shape/Shape';
 
 export default class Quadrilateral extends ShapeWithConnectionMatrix{
@@ -16,9 +17,23 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
     _lengthBC
     _lengthCD
     _lengthDA
+    _diagonalAC
+    _diagonalBD
+    _lengthDiagonalAC
+    _lengthDiagonalBD
 
     constructor() {
         super();
+    }
+
+    _setDiagonals(){
+        let diagonalAC =  this._pointA.distanceTo(this._pointC);
+        this._lengthDiagonalAC = diagonalAC[0];
+        this._diagonalAC = diagonalAC[1];
+
+        let diagonalBD = this._pointB.distanceTo(this._pointD);
+        this._lengthDiagonalBD = diagonalBD[0];
+        this._diagonalBD = diagonalBD[1];
     }
 
     get angleAInRadians() {
@@ -84,6 +99,14 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
             lengthCD: this.lengthCD,
             lengthDA: this.lengthDA
         };
+    }
+
+    get lengthDiagonalAC(){
+        return this._pointA.distanceTo(this._pointC)[0];
+    }
+
+    get lengthDiagonalBD(){
+        return this._pointB.distanceTo(this._pointD)[0];
     }
 
     get perimeter() {
