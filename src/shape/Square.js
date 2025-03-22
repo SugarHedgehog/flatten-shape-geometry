@@ -5,6 +5,8 @@ import {shiftCoordinate2D} from '../functions/general.js'
 export default class Square extends Quadrilateral{
     constructor(length){
         super();
+        if (length <= 0 || !Number.isFinite(Number(length)))
+            throw new TypeError(`Invalid length: Received length is ${JSON.stringify(lengths)}. Please provide three numeric side lengths.`);
         this.#setSides(length)
         this.#setAngles();
         this.#setCoordites(length);
