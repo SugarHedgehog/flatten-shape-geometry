@@ -109,10 +109,14 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
         return this._pointB.distanceTo(this._pointD)[0];
     }
 
+    get diagonalIntersectionPoint() {
+        return this._diagonalAC.intersect(this._diagonalBD)[0];
+    }
+
     get perimeter() {
         return Object.values(this.lengths).reduce(function (x, y) {
             return x + y;
-        }, 0);;
+        }, 0);
     }
 
     get semiperimeter() {
