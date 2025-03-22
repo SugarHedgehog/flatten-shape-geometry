@@ -51,8 +51,8 @@ import { isValidTriangle, calculateThirdSideUsingCosineLaw, findCircumcenter2D, 
 
 export default class Triangle extends ShapeWithConnectionMatrix {
     #isAngleInDegree;
-    connectionMatrix;
-    vertices;
+    _connectionMatrix;
+    _vertices;
     #pointA;
     #pointB;
     #pointC;
@@ -89,7 +89,7 @@ export default class Triangle extends ShapeWithConnectionMatrix {
             calculateMidlines = false
         } = supplementary;
 
-        this.connectionMatrix = [
+        this._connectionMatrix = [
             [1],
             [1, 1],
         ];
@@ -123,7 +123,7 @@ export default class Triangle extends ShapeWithConnectionMatrix {
             this.#lengthAB = new Segment(this.#pointA, this.#pointB).length;
             this.#lengthBC = new Segment(this.#pointB, this.#pointC).length;
             this.#lengthCA = new Segment(this.#pointC, this.#pointA).length;
-            this.vertices = [this.#pointA, this.#pointB, this.#pointC];
+            this._vertices = [this.#pointA, this.#pointB, this.#pointC];
             this.#setAngles();
             if (calculateMedians) {
                 this.#calculateMedians();
