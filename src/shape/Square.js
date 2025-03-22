@@ -45,8 +45,4 @@ export default class Square extends Quadrilateral {
         [this._pointA, this._pointB, this._pointC, this._pointD] = [A, B, C, D].map((vertex) => shiftCoordinate2D(vertex, new Point(length / 2, length / 2)));
         this._vertices = [this._pointA, this._pointB, this._pointC, this._pointD];
     }
-
-    get vertices() {
-        return this._vertices;
-    }
 }

@@ -97,4 +97,7 @@ export default class ShapeWithConnectionMatrix extends Polygon {
             this._connectionMatrix = connectionMatrix;
         }
 
+        get vertices() {
+            return this._vertices;
+        }
 }
