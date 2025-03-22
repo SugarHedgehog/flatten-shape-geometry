@@ -88,4 +88,13 @@ export default class ShapeWithConnectionMatrix extends Polygon {
                 });
             });
         }
+
+        get connectionMatrix() {
+            return this._connectionMatrix;
+        }
+    
+        set connectionMatrix(connectionMatrix) {
+            this._connectionMatrix = connectionMatrix;
+        }
+
 }

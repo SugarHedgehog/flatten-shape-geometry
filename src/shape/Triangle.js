@@ -595,14 +595,6 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         };
     }
 
-    get connectionMatrix() {
-        return this.connectionMatrix;
-    }
-
-    set connectionMatrix(connectionMatrix) {
-        this.connectionMatrix = connectionMatrix;
-    }
-
     get perimeter() {
         return this.lengthAB + this.lengthBC + this.lengthCA;
     }
