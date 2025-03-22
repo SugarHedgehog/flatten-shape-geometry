@@ -6,7 +6,7 @@ export default class Square extends Quadrilateral {
     constructor(length, supplementary = {}) {
         super();
         if (length <= 0 || !Number.isFinite(Number(length)))
-            throw new TypeError(`Invalid length: Received length is ${JSON.stringify(lengths)}. Please provide three numeric side lengths.`);
+            throw new TypeError(`Invalid length: Received length is ${JSON.stringify(length)}. Please specify a positive numeric value for the side length.`);
         this.#setSides(length)
         this.#setAngles();
         this.#setCoordites(length);
