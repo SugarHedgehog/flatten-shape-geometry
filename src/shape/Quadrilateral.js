@@ -85,7 +85,7 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
     }
 
     get lengthCD() {
-        return this._lengthBC;
+        return this._lengthCD;
     }
 
     get lengthDA() {
