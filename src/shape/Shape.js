@@ -1,8 +1,8 @@
 import {Polygon } from '@flatten-js/core';
 
 export default class ShapeWithConnectionMatrix extends Polygon {
-    connectionMatrix = [];
-    vertices = [];
+    _connectionMatrix = [];
+    _vertices = [];
     constructor() {  
         super();
     }
@@ -16,7 +16,7 @@ export default class ShapeWithConnectionMatrix extends Polygon {
                     throw new Error("Each point must have x and y coordinates");
                 }
             });
-            this.vertices.push(...points);
+            this._vertices.push(...points);
             if (type !== undefined) {
                 if (!Array.isArray(type)) {
                     type = [type];
@@ -25,19 +25,19 @@ export default class ShapeWithConnectionMatrix extends Polygon {
                     type = Array(points.length).fill(type[0]);
                 }
                 type.forEach(typeABC => {
-                    this.connectionMatrix.push(new Array(this.connectionMatrix.length + 1).fill(0));
+                    this._connectionMatrix.push(new Array(this._connectionMatrix.length + 1).fill(0));
                     switch (typeABC) {
                         case 'A':
-                            this.connectVerticesInConnectionMatrix([0, this.connectionMatrix.length]);
+                            this.connectVerticesInConnectionMatrix([0, this._connectionMatrix.length]);
                             break;
                         case 'B':
-                            this.connectVerticesInConnectionMatrix([1, this.connectionMatrix.length]);
+                            this.connectVerticesInConnectionMatrix([1, this._connectionMatrix.length]);
                             break;
                         case 'C':
-                            this.connectVerticesInConnectionMatrix([2, this.connectionMatrix.length]);
+                            this.connectVerticesInConnectionMatrix([2, this._connectionMatrix.length]);
                             break;
                         case 'S':
-                            this.connectVerticesInConnectionMatrix([this.connectionMatrix.length, this.connectionMatrix.length - 1]);
+                            this.connectVerticesInConnectionMatrix([this._connectionMatrix.length, this._connectionMatrix.length - 1]);
                             break;
                         case 'E':
                             break;
@@ -60,10 +60,10 @@ export default class ShapeWithConnectionMatrix extends Polygon {
                 if (index1 < index2) {
                     [index1, index2] = [index2, index1];
                 }
-                if (index1 < 0 || index2 < 0 || index1 >= this.vertices.length || index2 >= this.vertices.length) {
+                if (index1 < 0 || index2 < 0 || index1 >= this._vertices.length || index2 >= this._vertices.length) {
                     throw new Error("Vertex indices are out of bounds.");
                 }
-                this.connectionMatrix[index1 - 1][index2] = 1;
+                this._connectionMatrix[index1 - 1][index2] = 1;
             });
         }
     
