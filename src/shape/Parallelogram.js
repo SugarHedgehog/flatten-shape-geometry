@@ -60,13 +60,14 @@ export default class Parallelogram extends Quadrilateral {
 
         let keyAngle;
         Object.keys(angles).forEach(key => {
-            if (angles[key] !== undefined && angles[key] !== null) {
                 keyAngle = key;
                 return;
-            }
         });
 
         let angle = angles[keyAngle];
+        
+        if(!Number.isFinite(angle))
+            throw new Error(`Angle isnt numeric value. ${keyAngle}:${angle}`);
 
         angle = this._isAngleInDegree ? degreesToRadians(angle) : angle;
         let angleOther = Math.PI - angle;
