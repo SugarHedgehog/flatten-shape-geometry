@@ -40,7 +40,7 @@ export default class Parallelogram extends Quadrilateral {
                         this._lengthDA = lengths[key];
                         break;
                     default:
-                        throw new Error('Lengths arent difined');
+                        throw new Error(`Lengths arent difined. ${JSON.stringify(lengths)}`);
                 }
             }
         );
