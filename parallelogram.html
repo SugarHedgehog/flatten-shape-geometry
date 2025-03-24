@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parallelogram Class Demo - Flatten Shape Geometry</title>
+    <style>
+        /* Скопировал стили из примера Rhombus */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #333;
+        }
+
+        .demo-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        .code-example {
+            background-color: #eee;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+
+        .interactive {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 80px;
+        }
+
+        .canvas-container {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Parallelogram Class Demonstration</h1>
+    <p>This page demonstrates the usage of the Parallelogram class from the flattenShapeGeometry package.</p>
+
+    <div class="demo-section">
+        <h2>1. Basic Parallelogram Initialization</h2>
+        <div class="code-example">let parallelogram = new Parallelogram({lengthAB: 10, lengthBC: 5}, {angle: {angleA: Math.PI/4}});</div>
+        <div id="basic-init" class="result"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>2. Parallelogram Properties</h2>
+        <div class="code-example">// Access parallelogram properties
+            parallelogram.perimeter; // Get perimeter
+            parallelogram.area; // Get area
+            parallelogram.type; // Get shape type</div>
+        <div id="parallelogram-properties" class="result"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>3. Vertices and Coordinates</h2>
+        <div class="code-example">// Get parallelogram vertices
+            const vertices = parallelogram.vertices;</div>
+        <div id="vertices" class="result"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>4. Parallelogram Diagonals</h2>
+        <div class="code-example">// Get parallelogram diagonals
+            const lengthDiagonalAC = parallelogram.lengthDiagonalAC;
+            const lengthDiagonalBD = parallelogram.lengthDiagonalBD;</div>
+        <div id="diagonals" class="result"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>5. Parallelogram Angles</h2>
+        <div class="code-example">// Access parallelogram angles (in radians)
+            parallelogram._angleAInRadians;
+            parallelogram._angleBInRadians;
+            parallelogram._angleCInRadians;
+            parallelogram._angleDInRadians;</div>
+        <div id="angles" class="result"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>6. Visual Representation</h2>
+        <div class="canvas-container">
+            <canvas id="parallelogram-canvas" width="400" height="400"></canvas>
+        </div>
+        <div class="interactive">
+            <button id="rotate-parallelogram">Rotate Parallelogram</button>
+            <button id="reset-parallelogram">Reset</button>
+        </div>
+    </div>
+
+    <script src="dist/bundle.js"></script>
+    <script>
+        // Create a parallelogram instance
+        let parallelogram = new Parallelogram({lengthAB: 10, lengthBC: 5}, {angle: {angleA: Math.PI/4}});
+
+        // Basic initialization
+        document.getElementById('basic-init').innerHTML = `Parallelogram created with:
+- Length AB: ${parallelogram.lengthAB}
+- Length BC: ${parallelogram.lengthBC}
+- Vertices count: ${parallelogram.vertices.length}`;
+
+        // Display properties
+        document.getElementById('parallelogram-properties').innerHTML = `Parallelogram Properties:
+- Perimeter: ${parallelogram.perimeter}
+- Area: ${parallelogram.area()}`;
+
+        // Display vertices
+        const vertices = parallelogram.vertices;
+        let verticesText = 'Vertices coordinates:\n';
+        vertices.forEach((vertex, index) => {
+            verticesText += `- Vertex ${index + 1}: (${vertex.x.toFixed(2)}, ${vertex.y.toFixed(2)})\n`;
+        });
+        document.getElementById('vertices').innerHTML = verticesText;
+
+        // Display diagonals
+        document.getElementById('diagonals').innerHTML = `Parallelogram Diagonals:
+- Diagonal AC: ${parallelogram.lengthDiagonalAC}
+- Diagonal BD: ${parallelogram.lengthDiagonalBD}`;
+
+        // Update diagonals display on reset
+        document.getElementById('reset-parallelogram').addEventListener('click', function () {
+            let parallelogram = new Parallelogram({lengthAB: 10, lengthBC: 5}, {angle: {angleA: Math.PI/4}});
+
+            document.getElementById('diagonals').innerHTML = `Parallelogram Diagonals:
+- Diagonal AC: ${parallelogram.lengthDiagonalAC}
+- Diagonal BD: ${parallelogram.lengthDiagonalBD}`;
+        });
+
+        // Display angles
+        document.getElementById('angles').innerHTML = `Parallelogram Angles (in radians):
+- Angle A: ${parallelogram.angleAInRadians.toFixed(4)} (${parallelogram.angleAInDegrees.toFixed(4)})°)
+- Angle B: ${parallelogram.angleBInRadians.toFixed(4)} (${parallelogram.angleBInDegrees.toFixed(4)})°)
+- Angle C: ${parallelogram.angleCInRadians.toFixed(4)} (${parallelogram.angleCInDegrees.toFixed(4)})°)
+- Angle D: ${parallelogram.angleDInRadians.toFixed(4)} (${parallelogram.angleDInDegrees.toFixed(4)})°)`;
+
+        // Canvas visualization
+        const canvas = document.getElementById('parallelogram-canvas');
+        const ctx = canvas.getContext('2d');
+        let rotation = 0;
+
+        function drawParallelogram() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Center of canvas
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            // Scale factor to fit canvas
+            const scale = Math.min(canvas.width, canvas.height) / (parallelogram.lengthAB * 3);
+
+            // Draw coordinate axes
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(canvas.width, centerY);
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, canvas.height);
+            ctx.stroke();
+
+            // Draw parallelogram
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(rotation);
+
+            ctx.strokeStyle = '#007bff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            // Draw parallelogram based on vertices
+            const vertices = parallelogram.vertices;
+            ctx.moveTo(vertices[0].x * scale, vertices[0].y * scale);
+            for (let i = 1; i < vertices.length; i++) {
+                ctx.lineTo(vertices[i].x * scale, vertices[i].y * scale);
+            }
+            ctx.closePath();
+            ctx.stroke();
+
+            // Fill with semi-transparent color
+            ctx.fillStyle = 'rgba(0, 123, 255, 0.2)';
+            ctx.fill();
+
+            // Label vertices
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            vertices.forEach((vertex, index) => {
+                const label = String.fromCharCode(65 + index); // A, B, C, D
+                ctx.fillText(label, vertex.x * scale + 5, vertex.y * scale - 5);
+            });
+
+            ctx.restore();
+        }
+
+        // Initial draw
+        drawParallelogram();
+
+        // Rotation functionality
+        document.getElementById('rotate-parallelogram').addEventListener('click', function () {
+            rotation += Math.PI / 12; // Rotate by 15 degrees
+            drawParallelogram();
+        });
+
+        document.getElementById('reset-parallelogram').addEventListener('click', function () {
+            rotation = 0;
+            parallelogram = new Parallelogram({lengthAB: 10, lengthBC: 5}, {angle: {angleA: Math.PI/4}});
+
+            // Update all displays
+            document.getElementById('basic-init').innerHTML = `Parallelogram created with:
+- Length AB: ${parallelogram.lengthAB}
+- Length BC: ${parallelogram.lengthBC}
+- Vertices count: ${parallelogram.vertices.length}`;
+
+            document.getElementById('parallelogram-properties').innerHTML = `Parallelogram Properties:
+- Perimeter: ${parallelogram.perimeter}
+- Area: ${parallelogram.area()}`;
+
+            const vertices = parallelogram.vertices;
+            let verticesText = 'Vertices coordinates:\n';
+            vertices.forEach((vertex, index) => {
+                verticesText += `- Vertex ${index + 1}: (${vertex.x.toFixed(2)}, ${vertex.y.toFixed(2)})\n`;
+            });
+            document.getElementById('vertices').innerHTML = verticesText;
+
+            document.getElementById('angles').innerHTML = `Parallelogram Angles (in radians):
+- Angle A: ${parallelogram.angleAInRadians.toFixed(4)} (${(parallelogram.angleAInDegrees).toFixed(2)}°)
+- Angle B: ${parallelogram.angleBInRadians.toFixed(4)} (${(parallelogram.angleBInDegrees).toFixed(2)}°)
+- Angle C: ${parallelogram.angleCInRadians.toFixed(4)} (${(parallelogram.angleCInDegrees).toFixed(2)}°)
+- Angle D: ${parallelogram.angleDInRadians.toFixed(4)} (${(parallelogram.angleDInDegrees).toFixed(2)}°)`;
+
+            drawParallelogram();
+        });
+    </script>
+</body>
+</html>
