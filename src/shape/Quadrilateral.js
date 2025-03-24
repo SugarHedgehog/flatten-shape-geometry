@@ -1,5 +1,6 @@
 import { Segment } from '@flatten-js/core';
 import ShapeWithConnectionMatrix from '../shape/Shape';
+import degreesToRadians from 'degrees-radians';
 
 export default class Quadrilateral extends ShapeWithConnectionMatrix{
     _isAngleInDegree;
@@ -7,9 +8,6 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
     _pointB
     _pointC
     _pointD
-    _angleAInDegrees
-    _angleBInDegrees
-    _angleCInDegrees
     _angleAInRadians
     _angleBInRadians
     _angleCInRadians
@@ -49,15 +47,15 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
     }
 
     get angleAInDegrees() {
-        return this._angleAInDegrees;
+        return degreesToRadians(this.angleCInRadians);
     }
 
     get angleBInDegrees() {
-        return this._angleBInDegrees;
+        return degreesToRadians(this._angleBInDegrees);
     }
 
     get angleCInDegrees() {
-        return this._angleCInDegrees;
+        return degreesToRadians(this._angleCInDegrees);
     }
 
     get pointA() {
