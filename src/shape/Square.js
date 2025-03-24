@@ -10,7 +10,7 @@ export default class Square extends Quadrilateral {
         this.#setSides(length)
         this.#setAngles();
         this.#setCoordites(length);
-        this.addFace([this._pointA, this._pointB, this._pointC, this._pointD]);
+        this.addFace(this._vertices);
 
         const {
             calculateDiagonals = false,
@@ -36,7 +36,8 @@ export default class Square extends Quadrilateral {
     }
 
 
-    #setCoordites(length) {
+    #setCoordites() {
+        let length = this._lengthAB;
         const A = new Point(0, 0);
         const B = new Point(length, 0);
         const C = new Point(length, length);
