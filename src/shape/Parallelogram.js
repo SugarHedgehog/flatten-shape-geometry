@@ -7,11 +7,15 @@ export default class Parallelogram extends Quadrilateral {
     constructor(lengths = {}, angles = {}, supplementary = {}) {
         super();
 
-        if (Object.keys(lengths).length === 0)
-            throw new TypeError(`No lengths of the parallelogram are defined`);
+        if (Object.keys(lengths).length < 2)
+            throw new Error(`No lengths of the parallelogram are defined. ${JSON.stringify(lengths)}`);
+
+        if(('lengthAB' in lengths || 'lengthBC' in lengths) && ('lengthCD' in lengths || 'lengthDA' in lengths))
+            throw new Error(`Two parallel sides of a parallelogram are given. ${JSON.stringify(lengths)}`);
 
         if (Object.keys(angles.angle).length === 0)
-            throw new TypeError(`No angle of the parallelogram is defined`);
+            throw new TypeError(`No angle of the parallelogram is defined. ${JSON.stringify(angles)}`);
+        
         this.#setSides(lengths);
         this.#setAngles(angles);
         this.#setCoordinates();
