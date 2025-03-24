@@ -4,9 +4,11 @@ import {isValidTriangle, calculateThirdSideUsingCosineLaw} from './src/functions
 import Angle from './src/shape/Angle';
 import Triangle from './src/shape/Triangle';
 import Square from './src/shape/Square';
+import Rectangle from './src/shape/Rectangle';
 
 window.isValidTriangle = isValidTriangle;
 window.calculateThirdSideUsingCosineLaw = calculateThirdSideUsingCosineLaw;
 window.Angle = Angle;
 window.Triangle = Triangle;
 window.Square = Square;
+window.Rectangle = Rectangle;
