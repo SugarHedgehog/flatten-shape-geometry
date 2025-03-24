@@ -32,21 +32,25 @@ export default class Parallelogram extends Quadrilateral {
 
     #setSides(lengths) {
         Object.keys(lengths).forEach(key => {
+            let lengthOfSide = lengths[key];
+            if(lengthOfSide>0 && Number.isFinite(Number(lengthOfSide))){
                 switch(key){
                     case 'lengthAB':
                     case 'lengthCD': 
-                        this._lengthAB = lengths[key];
-                        this._lengthCD = lengths[key];
+                        this._lengthAB = lengthOfSide;
+                        this._lengthCD = lengthOfSide;
                         break;
                     case 'lengthBC':
                     case 'lengthDA':   
-                        this._lengthBC = lengths[key];
-                        this._lengthDA = lengths[key];
+                        this._lengthBC = lengthOfSide;
+                        this._lengthDA = lengthOfSide;
                         break;
                     default:
                         throw new Error(`Lengths arent difined. ${JSON.stringify(lengths)}`);
                 }
-            }
+            }else{
+                throw new Error(`Length isnt positive numeric value. ${key}:${lengthOfSide}`);
+            }}
         );
     }
 
