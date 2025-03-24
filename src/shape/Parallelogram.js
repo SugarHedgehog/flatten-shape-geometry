@@ -59,7 +59,6 @@ export default class Parallelogram extends Quadrilateral {
         });
 
         let angle = angles[keyAngle];
-        console.log(angle);
 
         angle = this._isAngleInDegree ? degreesToRadians(angle) : angle;
         let angleOther = Math.PI - angle;
@@ -82,8 +81,6 @@ export default class Parallelogram extends Quadrilateral {
             default:
                 throw new Error('Angles arent difined');
         }
-
-        console.log(this._angleAInRadians, this._angleBInRadians, this._angleCInRadians, this._angleDInRadians );
     }
 
     #setCoordinates() {
@@ -96,7 +93,6 @@ export default class Parallelogram extends Quadrilateral {
         const D = new Point(x, y);
 
         let point = new Segment(A,C).intersect(new Segment(B,D))[0];
-        console.log(point);
 
         [this._pointA, this._pointB, this._pointC, this._pointD] = [A, B, C, D].map((vertex) => shiftCoordinate2D(vertex, point));
                 this._vertices = [this._pointA, this._pointB, this._pointC, this._pointD];
