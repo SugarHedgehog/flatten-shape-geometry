@@ -1,4 +1,5 @@
-import { Point} from '@flatten-js/core';
+import { Point, Segment} from '@flatten-js/core';
+import { subtract, dot, multiply, add } from 'mathjs';
 
 /**
  * Checks if three given side lengths can form a valid triangle.
@@ -97,13 +98,25 @@ export function findCircumcenter2D(A, B, C) {
     return new Point(Ux, Uy);
 }
 
-export function calculateFootOfPerpendicular(point, side) {
-    const x1 = side.start.x;
-    const y1 = side.start.y;
-    const x2 = side.end.x;
-    const y2 = side.end.y;
-    const x0 = point.x;
-    const y0 = point.y;
+/**
+ * Calculates the perpendicular from a point to a segment
+ * 
+ * @param {Point} point - The point from which to calculate the perpendicular
+ * @param {Segment} segment - The segment to which the perpendicular is calculated
+ * @returns {Array} [number, Segment]
+ * @throws {TypeError} If point is not an instance of Point or segment is not an instance of Segment
+ */
+export function perpendicular(point, segment) {
+    if (!(point instanceof Point))
+        throw new TypeError("point must be instances of Point. typeof point: "+ typeof point);
+
+    if (!(segment instanceof Segment))
+        throw new TypeError("segment must be instances of Segment. typeof point: "+ typeof segment);
+
+    const [x1, y1] = [segment.start.x, segment.start.y];
+    const [x2, y2] = [segment.end.x, segment.end.y];
+
+    const [x0, y0] = [point.x, point.y];
 
     // Create vectors using math.js
     const lineVector = subtract([x2, y2], [x1, y1]);
@@ -116,6 +129,11 @@ export function calculateFootOfPerpendicular(point, side) {
 
     // Calculate the foot of the perpendicular
     const foot = add([x1, y1], projection);
+    const footPoint = new Point(foot[0], foot[1]);
 
-    return new Point(foot[0], foot[1]);
+    return point.distanceTo(footPoint);
+}
+
+export function calculateFootOfPerpendicular(point, segment){
+    return perpendicular(point, segment)[1].pe;
 }
