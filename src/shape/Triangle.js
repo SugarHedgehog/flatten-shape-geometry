@@ -51,8 +51,6 @@ import { isValidTriangle, calculateThirdSideUsingCosineLaw, findCircumcenter2D, 
 
 export default class Triangle extends ShapeWithConnectionMatrix {
     #isAngleInDegree;
-    _connectionMatrix;
-    _vertices;
     #pointA;
     #pointB;
     #pointC;
