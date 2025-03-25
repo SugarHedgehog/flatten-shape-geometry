@@ -96,3 +96,26 @@ export function findCircumcenter2D(A, B, C) {
 
     return new Point(Ux, Uy);
 }
+
+export function calculateFootOfPerpendicular(point, side) {
+    const x1 = side.start.x;
+    const y1 = side.start.y;
+    const x2 = side.end.x;
+    const y2 = side.end.y;
+    const x0 = point.x;
+    const y0 = point.y;
+
+    // Create vectors using math.js
+    const lineVector = subtract([x2, y2], [x1, y1]);
+    const pointVector = subtract([x0, y0], [x1, y1]);
+
+    // Project pointVector onto lineVector
+    const lineLengthSquared = dot(lineVector, lineVector);
+    const projectionFactor = dot(pointVector, lineVector) / lineLengthSquared;
+    const projection = multiply(lineVector, projectionFactor);
+
+    // Calculate the foot of the perpendicular
+    const foot = add([x1, y1], projection);
+
+    return new Point(foot[0], foot[1]);
+}
