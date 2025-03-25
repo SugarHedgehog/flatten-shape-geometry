@@ -12,10 +12,7 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
     _angleBInRadians
     _angleCInRadians
     _angleDInRadians
-    _lengthAB
-    _lengthBC
-    _lengthCD
-    _lengthDA
+
     _diagonalAC
     _diagonalBD
     _lengthDiagonalAC
@@ -83,20 +80,36 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
         return this._pointD.vertices[0];
     }
 
+    get segmentAB(){
+        return this._pointA.distanceTo(this._pointB)[1]
+    }
+
+    get segmentBC(){
+        return this._pointB.distanceTo(this._pointC)[1]
+    }
+
+    get segmentCD(){
+        return this._pointC.distanceTo(this._pointD)[1]
+    }
+
+    get segmentDA(){
+        return this._pointD.distanceTo(this._pointA)[1]
+    }
+
     get lengthAB() {
-        return this._lengthAB;
+        return this.segmentAB.length;
     }
 
     get lengthBC() {
-        return this._lengthBC;
+        return this.segmentBC.length;
     }
 
     get lengthCD() {
-        return this._lengthCD;
+        return this.segmentCD.length;
     }
 
     get lengthDA() {
-        return this._lengthDA;
+        return this.segmentDA.length;
     }
 
     get lengths() {
