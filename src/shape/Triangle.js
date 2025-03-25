@@ -72,9 +72,6 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     #midlineAB;
     #midlineBC;
     #midlineCA;
-    #angleAInDegrees;
-    #angleBInDegrees;
-    #angleCInDegrees;
     #angleAInRadians;
     #angleBInRadians;
     #angleCInRadians;
@@ -112,7 +109,7 @@ export default class Triangle extends ShapeWithConnectionMatrix {
                 break;
 
             case Object.keys(lengths).length == 2 && Number.isFinite(Number(angleValues)):
-                [this.#pointA, this.#pointB, this.#pointC] = this.findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleValues, this.#isAngleInDegree);
+                [this.#pointA, this.#pointB, this.#pointC] = this.findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleValues);
                 break;
 
             default:
@@ -146,12 +143,12 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         }
     }
 
-    findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleBetween, isAngleInDegree) {
-        if (Object.keys(lengths).length !== 2 || angleBetween <= 0 || angleBetween >= (isAngleInDegree ? 180 : Math.PI)) {
+    findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleBetween) {
+        if (Object.keys(lengths).length !== 2 || angleBetween <= 0 || angleBetween >= (this.#isAngleInDegree ? 180 : Math.PI)) {
             throw new Error("Invalid input: Provide exactly two side lengths and an angle between 0 and 180 degrees or 0 and π radians.");
         }
         const { lengthAB, lengthBC, lengthCA } = lengths;
-        const angleRadians = isAngleInDegree ? degreesToRadians(angleBetween) : angleBetween;
+        const angleRadians = this.#isAngleInDegree ? degreesToRadians(angleBetween) : angleBetween;
 
         let side1, side2, side3;
 
@@ -196,21 +193,9 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     #setAngles() {
-        if (this.#isAngleInDegree) {
-            this.#angleAInDegrees = new Angle(this.#pointB, this.#pointA, this.#pointC).angleInDegrees;
-            this.#angleBInDegrees = new Angle(this.#pointA, this.#pointB, this.#pointC).angleInDegrees;
-            this.#angleCInDegrees = new Angle(this.#pointA, this.#pointC, this.#pointB).angleInDegrees;
-            this.#angleAInRadians = degreesToRadians(this.#angleAInDegrees);
-            this.#angleBInRadians = degreesToRadians(this.#angleBInDegrees);
-            this.#angleCInRadians = degreesToRadians(this.#angleCInDegrees);
-        } else {
-            this.#angleAInRadians = new Angle(this.#pointB, this.#pointA, this.#pointC).angleInRadians;
-            this.#angleBInRadians = new Angle(this.#pointA, this.#pointB, this.#pointC).angleInRadians;
-            this.#angleCInRadians = new Angle(this.#pointA, this.#pointC, this.#pointB).angleInRadians;
-            this.#angleAInDegrees = radiansToDegrees(this.#angleAInRadians);
-            this.#angleBInDegrees = radiansToDegrees(this.#angleBInRadians);
-            this.#angleCInDegrees = radiansToDegrees(this.#angleCInRadians);
-        }
+        this.#angleAInRadians = new Angle(this.#pointB, this.#pointA, this.#pointC).angleInRadians;
+        this.#angleBInRadians = new Angle(this.#pointA, this.#pointB, this.#pointC).angleInRadians;
+        this.#angleCInRadians = new Angle(this.#pointA, this.#pointC, this.#pointB).angleInRadians;
     }
 
     #calculateMedians() {
@@ -556,15 +541,15 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     get angleAInDegrees() {
-        return this.#angleAInDegrees;
+        return radiansToDegrees(this.#angleAInRadians);
     }
 
     get angleBInDegrees() {
-        return this.#angleBInDegrees;
+        return radiansToDegrees(this.#angleBInRadians);
     }
 
     get angleCInDegrees() {
-        return this.#angleCInDegrees;
+        return radiansToDegrees(this.#angleCInRadians);
     }
 
     get pointA() {
