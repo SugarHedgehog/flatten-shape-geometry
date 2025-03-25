@@ -8,7 +8,7 @@ export default class Rhombus extends Quadrilateral {
         if (length <= 0 || !Number.isFinite(Number(length)))
             throw new TypeError(`Invalid length: Received length is ${JSON.stringify(length)}. Please specify a positive numeric value for the side length.`);
 
-        if (Object.keys(angles.angle).length === 0)
+        if (!angles.angle || typeof angles.angle !== 'object' || Object.keys(angles.angle).length === 0)
             throw new TypeError(`No angle of the rhombus is defined`);
 
         this.#setSides(length);
@@ -37,7 +37,13 @@ export default class Rhombus extends Quadrilateral {
             }
         });
 
+        if (!keyAngle) {
+            throw new Error('No angle of the rhombus is defined');
+        }
+
         let angle = angles[keyAngle];
+        if (!Number.isFinite(Number(angle)))
+            throw new TypeError(`Invalid angle: Received angle is ${JSON.stringify(angle)}. Please specify a numeric value for the angle.`);
 
         angle = this._isAngleInDegree ? degreesToRadians(angle) : angle;
         let angleOther = Math.PI - angle;
@@ -58,7 +64,7 @@ export default class Rhombus extends Quadrilateral {
                 this._angleDInRadians = angle;
                 break;
             default:
-                throw new Error('Angles arent difined');
+                throw new Error('Angles are not defined');
         }
     }
 
@@ -80,5 +86,4 @@ export default class Rhombus extends Quadrilateral {
         [this._pointA, this._pointB, this._pointC, this._pointD] = [this._diagonalAC.ps, this._diagonalBD.ps, this._diagonalAC.pe, this._diagonalBD.pe];
         this._vertices = [this._pointA, this._pointB, this._pointC, this._pointD];
     }
-
 }
