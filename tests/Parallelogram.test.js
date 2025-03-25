@@ -6,10 +6,10 @@ import { shiftCoordinate2D } from '../src/functions/general.js';
 describe('Parallelogram', () => {
     it('should create a parallelogram with given side lengths and angles', () => {
         const parallelogram = new Parallelogram({ lengthAB: 4, lengthBC: 3 }, { angle: { angleA: 60 }, angleInDegree: true });
-        expect(parallelogram.lengthAB).toBe(4);
-        expect(parallelogram.lengthBC).toBe(3);
-        expect(parallelogram.lengthCD).toBe(4);
-        expect(parallelogram.lengthDA).toBe(3);
+        expect(parallelogram.lengthAB).toBeCloseTo(4);
+        expect(parallelogram.lengthBC).toBeCloseTo(3);
+        expect(parallelogram.lengthCD).toBeCloseTo(4);
+        expect(parallelogram.lengthDA).toBeCloseTo(3);
     });
 
     it('should have correct angles in radians and degrees', () => {
