@@ -108,12 +108,20 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
         };
     }
 
+    get diagonalAC(){
+        return this._diagonalAC;
+    }
+
+    get diagonalBD(){
+        return this._diagonalBD;
+    }
+
     get lengthDiagonalAC(){
-        return this._pointA.distanceTo(this._pointC)[0];
+        return this._lengthDiagonalAC;
     }
 
     get lengthDiagonalBD(){
-        return this._pointB.distanceTo(this._pointD)[0];
+        return this._lengthDiagonalBD;
     }
 
     get diagonalIntersectionPoint() {
