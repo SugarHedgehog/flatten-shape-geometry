@@ -1,4 +1,4 @@
-import { Point, Segment} from '@flatten-js/core';
+import { Point, Segment, Line} from '@flatten-js/core';
 import { subtract, dot, multiply, add } from 'mathjs';
 
 /**
@@ -112,6 +112,9 @@ export function perpendicular(point, segment) {
 
     if (!(segment instanceof Segment))
         throw new TypeError("segment must be instances of Segment. typeof point: "+ typeof segment);
+
+    if(new Line(segment.pe, segment.ps).contains(point))
+        throw new Error("The point and the segment lie on the same straight line");
 
     const [x1, y1] = [segment.start.x, segment.start.y];
     const [x2, y2] = [segment.end.x, segment.end.y];
