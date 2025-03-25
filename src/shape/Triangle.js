@@ -581,6 +581,18 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         return this.#pointC.vertices;
     }
 
+    get segmentAB() {
+        return this.#segmentAB;
+    }
+
+    get segmentBC() {
+        return this.#segmentBC;
+    }
+
+    get segmentCA() {
+        return this.#segmentCA;
+    }
+
     get lengthAB() {
         return this.#lengthAB;
     }
