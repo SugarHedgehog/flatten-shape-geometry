@@ -1,10 +1,9 @@
 import { Point, Segment } from '@flatten-js/core';
 import degreesToRadians from 'degrees-radians';
 import radiansToDegrees from 'radians-degrees';
-import { subtract, dot, multiply, add } from 'mathjs';
 import ShapeWithConnectionMatrix from '../shape/Shape';
 import Angle from '../shape/Angle'
-import { isValidTriangle, calculateThirdSideUsingCosineLaw, findCircumcenter2D, shiftCoordinate2D } from '../functions/general.js'
+import { isValidTriangle, calculateThirdSideUsingCosineLaw, findCircumcenter2D, shiftCoordinate2D, calculateFootOfPerpendicular} from '../functions/general.js'
 
 /**
  * Represents a Triangle with various properties and methods to calculate its characteristics.
@@ -277,37 +276,15 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     #calculateHeights() {
-        const footA = this._calculateFootOfPerpendicular(this.#pointA, this.#segmentBC);
-        const footB = this._calculateFootOfPerpendicular(this.#pointB, this.#segmentCA);
-        const footC = this._calculateFootOfPerpendicular(this.#pointC, this.#segmentAB);
+        const footA = calculateFootOfPerpendicular(this.#pointA, this.#segmentBC);
+        const footB = calculateFootOfPerpendicular(this.#pointB, this.#segmentCA);
+        const footC = calculateFootOfPerpendicular(this.#pointC, this.#segmentAB);
 
         this.#heightA = new Segment(this.#pointA, footA);
         this.#heightB = new Segment(this.#pointB, footB);
         this.#heightC = new Segment(this.#pointC, footC);
     }
 
-    _calculateFootOfPerpendicular(point, side) {
-        const x1 = side.start.x;
-        const y1 = side.start.y;
-        const x2 = side.end.x;
-        const y2 = side.end.y;
-        const x0 = point.x;
-        const y0 = point.y;
-
-        // Create vectors using math.js
-        const lineVector = subtract([x2, y2], [x1, y1]);
-        const pointVector = subtract([x0, y0], [x1, y1]);
-
-        // Project pointVector onto lineVector
-        const lineLengthSquared = dot(lineVector, lineVector);
-        const projectionFactor = dot(pointVector, lineVector) / lineLengthSquared;
-        const projection = multiply(lineVector, projectionFactor);
-
-        // Calculate the foot of the perpendicular
-        const foot = add([x1, y1], projection);
-
-        return new Point(foot[0], foot[1]);
-    }
 
     get heightA() {
         return this.#heightA;

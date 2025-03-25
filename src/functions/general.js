@@ -1,4 +1,5 @@
-import { Point} from '@flatten-js/core';
+import { Point, Segment, Line} from '@flatten-js/core';
+import { subtract, dot, multiply, add } from 'mathjs';
 
 /**
  * Checks if three given side lengths can form a valid triangle.
@@ -95,4 +96,55 @@ export function findCircumcenter2D(A, B, C) {
     const Uy = (1 / D) * ((A.x * A.x + A.y * A.y) * (C.x - B.x) + (B.x * B.x + B.y * B.y) * (A.x - C.x) + (C.x * C.x + C.y * C.y) * (B.x - A.x));
 
     return new Point(Ux, Uy);
+}
+
+/**
+ * Calculates the perpendicular from a point to a segment
+ * 
+ * @param {Point} point - The point from which to calculate the perpendicular
+ * @param {Segment} segment - The segment to which the perpendicular is calculated
+ * @returns {Array} [number, Segment]
+ * @throws {TypeError} If point is not an instance of Point or segment is not an instance of Segment
+ */
+export function perpendicular(point, segment) {
+    if (!(point instanceof Point))
+        throw new TypeError("point must be instances of Point. typeof point: "+ typeof point);
+
+    if (!(segment instanceof Segment))
+        throw new TypeError("segment must be instances of Segment. typeof point: "+ typeof segment);
+
+    if(new Line(segment.pe, segment.ps).contains(point))
+        throw new Error("The point and the segment lie on the same straight line");
+
+    const [x1, y1] = [segment.start.x, segment.start.y];
+    const [x2, y2] = [segment.end.x, segment.end.y];
+
+    const [x0, y0] = [point.x, point.y];
+
+    // Create vectors using math.js
+    const lineVector = subtract([x2, y2], [x1, y1]);
+    const pointVector = subtract([x0, y0], [x1, y1]);
+
+    // Project pointVector onto lineVector
+    const lineLengthSquared = dot(lineVector, lineVector);
+    const projectionFactor = dot(pointVector, lineVector) / lineLengthSquared;
+    const projection = multiply(lineVector, projectionFactor);
+
+    // Calculate the foot of the perpendicular
+    const foot = add([x1, y1], projection);
+    const footPoint = new Point(foot[0], foot[1]);
+
+    return point.distanceTo(footPoint);
+}
+
+/**
+ * Calculates the foot of the perpendicular from a point to a segment
+ * 
+ * @param {Point} point - The point from which to calculate the perpendicular
+ * @param {Segment} segment - The segment to which the perpendicular is calculated
+ * @returns {Point} The foot of the perpendicular point
+ * @throws {TypeError} If point is not an instance of Point or segment is not an instance of Segment
+ */
+export function calculateFootOfPerpendicular(point, segment){
+    return perpendicular(point, segment)[1].pe;
 }
