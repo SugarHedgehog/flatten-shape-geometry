@@ -51,11 +51,12 @@ import { isValidTriangle, calculateThirdSideUsingCosineLaw, findCircumcenter2D, 
 
 export default class Triangle extends ShapeWithConnectionMatrix {
     #isAngleInDegree;
-    _connectionMatrix;
-    _vertices;
     #pointA;
     #pointB;
     #pointC;
+    #segmentAB;
+    #segmentBC;
+    #segmentCA;
     #lengthAB;
     #lengthBC;
     #lengthCA;
@@ -71,9 +72,6 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     #midlineAB;
     #midlineBC;
     #midlineCA;
-    #angleAInDegrees;
-    #angleBInDegrees;
-    #angleCInDegrees;
     #angleAInRadians;
     #angleBInRadians;
     #angleCInRadians;
@@ -111,7 +109,7 @@ export default class Triangle extends ShapeWithConnectionMatrix {
                 break;
 
             case Object.keys(lengths).length == 2 && Number.isFinite(Number(angleValues)):
-                [this.#pointA, this.#pointB, this.#pointC] = this.findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleValues, this.#isAngleInDegree);
+                [this.#pointA, this.#pointB, this.#pointC] = this.findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleValues);
                 break;
 
             default:
@@ -120,9 +118,12 @@ export default class Triangle extends ShapeWithConnectionMatrix {
 
         if (this.#pointA && this.#pointB && this.#pointC) {
             this.addFace([this.#pointA, this.#pointB, this.#pointC]);
-            this.#lengthAB = new Segment(this.#pointA, this.#pointB).length;
-            this.#lengthBC = new Segment(this.#pointB, this.#pointC).length;
-            this.#lengthCA = new Segment(this.#pointC, this.#pointA).length;
+            this.#segmentAB = new Segment(this.#pointA, this.#pointB);
+            this.#segmentBC = new Segment(this.#pointB, this.#pointC);
+            this.#segmentCA = new Segment(this.#pointC, this.#pointA);
+            this.#lengthAB = this.#segmentAB.length;
+            this.#lengthBC = this.#segmentBC.length;
+            this.#lengthCA = this.#segmentCA.length;
             this._vertices = [this.#pointA, this.#pointB, this.#pointC];
             this.#setAngles();
             if (calculateMedians) {
@@ -142,12 +143,12 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         }
     }
 
-    findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleBetween, isAngleInDegree) {
-        if (Object.keys(lengths).length !== 2 || angleBetween <= 0 || angleBetween >= (isAngleInDegree ? 180 : Math.PI)) {
+    findTriangleVertices2DFromTwoSidesAndAngle(lengths, angleBetween) {
+        if (Object.keys(lengths).length !== 2 || angleBetween <= 0 || angleBetween >= (this.#isAngleInDegree ? 180 : Math.PI)) {
             throw new Error("Invalid input: Provide exactly two side lengths and an angle between 0 and 180 degrees or 0 and π radians.");
         }
         const { lengthAB, lengthBC, lengthCA } = lengths;
-        const angleRadians = isAngleInDegree ? degreesToRadians(angleBetween) : angleBetween;
+        const angleRadians = this.#isAngleInDegree ? degreesToRadians(angleBetween) : angleBetween;
 
         let side1, side2, side3;
 
@@ -192,27 +193,15 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     #setAngles() {
-        if (this.#isAngleInDegree) {
-            this.#angleAInDegrees = new Angle(this.#pointB, this.#pointA, this.#pointC).angleInDegrees;
-            this.#angleBInDegrees = new Angle(this.#pointA, this.#pointB, this.#pointC).angleInDegrees;
-            this.#angleCInDegrees = new Angle(this.#pointA, this.#pointC, this.#pointB).angleInDegrees;
-            this.#angleAInRadians = degreesToRadians(this.#angleAInDegrees);
-            this.#angleBInRadians = degreesToRadians(this.#angleBInDegrees);
-            this.#angleCInRadians = degreesToRadians(this.#angleCInDegrees);
-        } else {
-            this.#angleAInRadians = new Angle(this.#pointB, this.#pointA, this.#pointC).angleInRadians;
-            this.#angleBInRadians = new Angle(this.#pointA, this.#pointB, this.#pointC).angleInRadians;
-            this.#angleCInRadians = new Angle(this.#pointA, this.#pointC, this.#pointB).angleInRadians;
-            this.#angleAInDegrees = radiansToDegrees(this.#angleAInRadians);
-            this.#angleBInDegrees = radiansToDegrees(this.#angleBInRadians);
-            this.#angleCInDegrees = radiansToDegrees(this.#angleCInRadians);
-        }
+        this.#angleAInRadians = new Angle(this.#pointB, this.#pointA, this.#pointC).angleInRadians;
+        this.#angleBInRadians = new Angle(this.#pointA, this.#pointB, this.#pointC).angleInRadians;
+        this.#angleCInRadians = new Angle(this.#pointA, this.#pointC, this.#pointB).angleInRadians;
     }
 
     #calculateMedians() {
-        const midPointBC = new Segment(this.#pointB, this.#pointC).middle();
-        const midPointCA = new Segment(this.#pointC, this.#pointA).middle();
-        const midPointAB = new Segment(this.#pointA, this.#pointB).middle();
+        const midPointBC = this.#segmentBC.middle();
+        const midPointCA = this.#segmentCA.middle();
+        const midPointAB = this.#segmentAB.middle();
 
         this.#medianA = new Segment(this.#pointA, midPointBC);
         this.#medianB = new Segment(this.#pointB, midPointCA);
@@ -288,9 +277,9 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     #calculateHeights() {
-        const footA = this._calculateFootOfPerpendicular(this.#pointA, new Segment(this.#pointB, this.#pointC));
-        const footB = this._calculateFootOfPerpendicular(this.#pointB, new Segment(this.#pointC, this.#pointA));
-        const footC = this._calculateFootOfPerpendicular(this.#pointC, new Segment(this.#pointA, this.#pointB));
+        const footA = this._calculateFootOfPerpendicular(this.#pointA, this.#segmentBC);
+        const footB = this._calculateFootOfPerpendicular(this.#pointB, this.#segmentCA);
+        const footC = this._calculateFootOfPerpendicular(this.#pointC, this.#segmentAB);
 
         this.#heightA = new Segment(this.#pointA, footA);
         this.#heightB = new Segment(this.#pointB, footB);
@@ -389,9 +378,9 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     #calculateBisectors() {
-        this.#bisectorA = this._calculateBisector(this.#pointA, new Segment(this.#pointB, this.#pointC));
-        this.#bisectorB = this._calculateBisector(this.#pointB, new Segment(this.#pointC, this.#pointA));
-        this.#bisectorC = this._calculateBisector(this.#pointC, new Segment(this.#pointA, this.#pointB));
+        this.#bisectorA = this._calculateBisector(this.#pointA, this.#segmentBC);
+        this.#bisectorB = this._calculateBisector(this.#pointB, this.#segmentCA);
+        this.#bisectorC = this._calculateBisector(this.#pointC, this.#segmentAB);
     }
 
     _calculateBisector(vertex, oppositeSide) {
@@ -474,9 +463,9 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     #calculateMidlines() {
-        const midPointAB = new Segment(this.#pointA, this.#pointB).middle();
-        const midPointBC = new Segment(this.#pointB, this.#pointC).middle();
-        const midPointCA = new Segment(this.#pointC, this.#pointA).middle();
+        const midPointAB = this.#segmentAB.middle();
+        const midPointBC = this.#segmentBC.middle();
+        const midPointCA = this.#segmentCA.middle();
 
         this.#midlineAB = new Segment(midPointBC, midPointCA);
         this.#midlineBC = new Segment(midPointCA, midPointAB);
@@ -552,15 +541,15 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     get angleAInDegrees() {
-        return this.#angleAInDegrees;
+        return radiansToDegrees(this.#angleAInRadians);
     }
 
     get angleBInDegrees() {
-        return this.#angleBInDegrees;
+        return radiansToDegrees(this.#angleBInRadians);
     }
 
     get angleCInDegrees() {
-        return this.#angleCInDegrees;
+        return radiansToDegrees(this.#angleCInRadians);
     }
 
     get pointA() {
@@ -573,6 +562,18 @@ export default class Triangle extends ShapeWithConnectionMatrix {
 
     get pointC() {
         return this.#pointC.vertices;
+    }
+
+    get segmentAB() {
+        return this.#segmentAB;
+    }
+
+    get segmentBC() {
+        return this.#segmentBC;
+    }
+
+    get segmentCA() {
+        return this.#segmentCA;
     }
 
     get lengthAB() {
