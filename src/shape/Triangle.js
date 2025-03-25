@@ -56,9 +56,6 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     #segmentAB;
     #segmentBC;
     #segmentCA;
-    #lengthAB;
-    #lengthBC;
-    #lengthCA;
     #medianA;
     #medianB;
     #medianC;
@@ -120,9 +117,6 @@ export default class Triangle extends ShapeWithConnectionMatrix {
             this.#segmentAB = new Segment(this.#pointA, this.#pointB);
             this.#segmentBC = new Segment(this.#pointB, this.#pointC);
             this.#segmentCA = new Segment(this.#pointC, this.#pointA);
-            this.#lengthAB = this.#segmentAB.length;
-            this.#lengthBC = this.#segmentBC.length;
-            this.#lengthCA = this.#segmentCA.length;
             this._vertices = [this.#pointA, this.#pointB, this.#pointC];
             this.#setAngles();
             if (calculateMedians) {
@@ -554,15 +548,15 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     get lengthAB() {
-        return this.#lengthAB;
+        return this.#segmentAB.length;
     }
 
     get lengthBC() {
-        return this.#lengthBC;
+        return this.#segmentBC.length;
     }
 
     get lengthCA() {
-        return this.#lengthCA;
+        return this.#segmentCA.length;
     }
 
     get lengths() {
