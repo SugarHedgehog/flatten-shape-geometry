@@ -56,6 +56,9 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     #pointA;
     #pointB;
     #pointC;
+    #segmentAB;
+    #segmentBC;
+    #segmentCA;
     #lengthAB;
     #lengthBC;
     #lengthCA;
@@ -120,9 +123,12 @@ export default class Triangle extends ShapeWithConnectionMatrix {
 
         if (this.#pointA && this.#pointB && this.#pointC) {
             this.addFace([this.#pointA, this.#pointB, this.#pointC]);
-            this.#lengthAB = new Segment(this.#pointA, this.#pointB).length;
-            this.#lengthBC = new Segment(this.#pointB, this.#pointC).length;
-            this.#lengthCA = new Segment(this.#pointC, this.#pointA).length;
+            this.#segmentAB = new Segment(this.#pointA, this.#pointB);
+            this.#segmentBC = new Segment(this.#pointB, this.#pointC);
+            this.#segmentCA = new Segment(this.#pointC, this.#pointA);
+            this.#lengthAB = this.#segmentAB.length;
+            this.#lengthBC = this.#segmentBC.length;
+            this.#lengthCA = this.#segmentCA.length;
             this._vertices = [this.#pointA, this.#pointB, this.#pointC];
             this.#setAngles();
             if (calculateMedians) {
@@ -210,9 +216,9 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     #calculateMedians() {
-        const midPointBC = new Segment(this.#pointB, this.#pointC).middle();
-        const midPointCA = new Segment(this.#pointC, this.#pointA).middle();
-        const midPointAB = new Segment(this.#pointA, this.#pointB).middle();
+        const midPointBC = this.#segmentBC.middle();
+        const midPointCA = this.#segmentCA.middle();
+        const midPointAB = this.#segmentAB.middle();
 
         this.#medianA = new Segment(this.#pointA, midPointBC);
         this.#medianB = new Segment(this.#pointB, midPointCA);
@@ -288,9 +294,9 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     #calculateHeights() {
-        const footA = this._calculateFootOfPerpendicular(this.#pointA, new Segment(this.#pointB, this.#pointC));
-        const footB = this._calculateFootOfPerpendicular(this.#pointB, new Segment(this.#pointC, this.#pointA));
-        const footC = this._calculateFootOfPerpendicular(this.#pointC, new Segment(this.#pointA, this.#pointB));
+        const footA = this._calculateFootOfPerpendicular(this.#pointA, this.#segmentBC);
+        const footB = this._calculateFootOfPerpendicular(this.#pointB, this.#segmentCA);
+        const footC = this._calculateFootOfPerpendicular(this.#pointC, this.#segmentAB);
 
         this.#heightA = new Segment(this.#pointA, footA);
         this.#heightB = new Segment(this.#pointB, footB);
@@ -389,9 +395,9 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     #calculateBisectors() {
-        this.#bisectorA = this._calculateBisector(this.#pointA, new Segment(this.#pointB, this.#pointC));
-        this.#bisectorB = this._calculateBisector(this.#pointB, new Segment(this.#pointC, this.#pointA));
-        this.#bisectorC = this._calculateBisector(this.#pointC, new Segment(this.#pointA, this.#pointB));
+        this.#bisectorA = this._calculateBisector(this.#pointA, this.#segmentBC);
+        this.#bisectorB = this._calculateBisector(this.#pointB, this.#segmentCA);
+        this.#bisectorC = this._calculateBisector(this.#pointC, this.#segmentAB);
     }
 
     _calculateBisector(vertex, oppositeSide) {
@@ -474,9 +480,9 @@ export default class Triangle extends ShapeWithConnectionMatrix {
     }
 
     #calculateMidlines() {
-        const midPointAB = new Segment(this.#pointA, this.#pointB).middle();
-        const midPointBC = new Segment(this.#pointB, this.#pointC).middle();
-        const midPointCA = new Segment(this.#pointC, this.#pointA).middle();
+        const midPointAB = this.#segmentAB.middle();
+        const midPointBC = this.#segmentBC.middle();
+        const midPointCA = this.#segmentCA.middle();
 
         this.#midlineAB = new Segment(midPointBC, midPointCA);
         this.#midlineBC = new Segment(midPointCA, midPointAB);
