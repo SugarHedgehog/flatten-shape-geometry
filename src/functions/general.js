@@ -134,6 +134,14 @@ export function perpendicular(point, segment) {
     return point.distanceTo(footPoint);
 }
 
+/**
+ * Calculates the foot of the perpendicular from a point to a segment
+ * 
+ * @param {Point} point - The point from which to calculate the perpendicular
+ * @param {Segment} segment - The segment to which the perpendicular is calculated
+ * @returns {Point} The foot of the perpendicular point
+ * @throws {TypeError} If point is not an instance of Point or segment is not an instance of Segment
+ */
 export function calculateFootOfPerpendicular(point, segment){
     return perpendicular(point, segment)[1].pe;
 }
