@@ -13,10 +13,11 @@ export default class Parallelogram extends Quadrilateral {
         if(('lengthAB' in lengths || 'lengthBC' in lengths) && ('lengthCD' in lengths || 'lengthDA' in lengths))
             throw new Error(`Two parallel sides of a parallelogram are given. ${JSON.stringify(lengths)}`);
 
-        if (Object.keys(angles.angle).length === 0)
+        this.#setSides(lengths);
+
+        if (!angles.angle || typeof angles.angle !== 'object' || Object.keys(angles.angle).length === 0)
             throw new TypeError(`No angle of the parallelogram is defined. ${JSON.stringify(angles)}`);
         
-        this.#setSides(lengths);
         this.#setAngles(angles);
         this.#setCoordinates();
         this.addFace(this._vertices);
@@ -104,7 +105,6 @@ export default class Parallelogram extends Quadrilateral {
         let point = new Segment(A,C).intersect(new Segment(B,D))[0];
 
         [this._pointA, this._pointB, this._pointC, this._pointD] = [A, B, C, D].map((vertex) => shiftCoordinate2D(vertex, point));
-                this._vertices = [this._pointA, this._pointB, this._pointC, this._pointD];
         this._vertices = [this._pointA, this._pointB, this._pointC, this._pointD];
     }
 
