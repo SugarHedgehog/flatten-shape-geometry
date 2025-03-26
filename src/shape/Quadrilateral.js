@@ -1,13 +1,15 @@
-import { Segment } from '@flatten-js/core';
 import ShapeWithConnectionMatrix from '../shape/Shape';
 import radiansToDegrees from 'radians-degrees';
+import {perpendicular} from '../functions/general'
 
 export default class Quadrilateral extends ShapeWithConnectionMatrix{
     _isAngleInDegree;
+
     _pointA
     _pointB
     _pointC
     _pointD
+
     _angleAInRadians
     _angleBInRadians
     _angleCInRadians
@@ -17,6 +19,15 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
     _diagonalBD
     _lengthDiagonalAC
     _lengthDiagonalBD
+
+    _heightABC
+    _heightACD
+    _heightBCD
+    _heightBDA
+    _heightCAB
+    _heightCDA
+    _heightDAB
+    _heightDBC
 
     constructor() {
         super();
@@ -30,6 +41,20 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
         let diagonalBD = this._pointB.distanceTo(this._pointD);
         this._lengthDiagonalBD = diagonalBD[0];
         this._diagonalBD = diagonalBD[1];
+    }
+
+    _setHeights(){
+        this._heightABC = perpendicular(this._pointA, this.segmentBC)[1];
+        this._heightACD = perpendicular(this._pointA, this.segmentCD)[1];
+
+        this._heightBCD = perpendicular(this._pointB, this.segmentCD)[1]; 
+        this._heightBDA = perpendicular(this._pointB, this.segmentDA)[1];
+
+        this._heightCAB = perpendicular(this._pointC, this.segmentAB)[1];
+        this._heightCDA = perpendicular(this._pointC, this.segmentDA)[1];
+
+        this._heightDAB = perpendicular(this._pointD, this.segmentAB)[1];
+        this._heightDBC = perpendicular(this._pointD, this.segmentBC)[1];
     }
 
     get angleAInRadians() {
@@ -119,6 +144,70 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
             lengthCD: this.lengthCD,
             lengthDA: this.lengthDA
         };
+    }
+
+    get heightABC(){
+        return this._heightABC;
+    }
+
+    get heightACD(){
+        return this._heightACD;
+    }
+
+    get heightBCD(){
+        return this._heightBCD;
+    }
+    
+    get heightBDA(){
+        return this._heightBDA;
+    }
+
+    get heightCAB(){
+        return this._heightCAB;
+    }
+
+    get heightCDA(){
+        return this._heightCDA;
+    }
+
+    get heightDAB(){
+        return this._heightDAB;
+    }
+
+    get heightDBC(){
+        return this._heightDBC;
+    }
+
+    get lengthHeightABC(){
+        return this.heightABC.length;
+    }
+
+    get lengthHeightACD(){
+        return this.heightACD.length;
+    }
+
+    get lengthHeightBCD(){
+        return this.heightBCD.length;
+    }
+    
+    get lengthHeightBDA(){
+        return this.heightBDA.length;
+    }
+
+    get lengthHeightCAB(){
+        return this.heightCAB.length;
+    }
+
+    get lengthHeightCDA(){
+        return this.heightCDA.length;
+    }
+
+    get lengthHeightDAB(){
+        return this.heightDAB.length;
+    }
+
+    get lengthHeightDBC(){
+        return this.heightDBC.length;
     }
 
     get diagonalAC(){
