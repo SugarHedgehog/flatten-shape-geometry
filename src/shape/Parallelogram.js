@@ -24,10 +24,15 @@ export default class Parallelogram extends Quadrilateral {
 
         const {
             calculateDiagonals = false,
+            calculateHeights = false,
         } = supplementary;
 
         if(calculateDiagonals){
             this._setDiagonals();
+        }
+
+        if(calculateHeights){
+            this._setHeights();
         }
     }
 
