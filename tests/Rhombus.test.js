@@ -64,4 +64,25 @@ describe('Rhombus', () => {
         expect(() => new Rhombus(2, { angle: {} })).toThrow(/No angle of the rhombus is defined/);
         expect(() => new Rhombus(2, { angle: { angleE: 60 } })).toThrow(/Angles are not defined/);
     });
+
+    it('should correctly calculate all heights with proper options', () => {
+        const rhombus = new Rhombus(2, { 
+            angle: { angleA: 60 }, 
+            angleInDegree: true 
+        }, { 
+            calculateHeights: true 
+        });
+    
+        const heightValue = 2 * Math.sin(degreesToRadians(60));
+        
+        // Check all heights
+        expect(rhombus.lengthHeightABC).toBeCloseTo(heightValue);
+        expect(rhombus.lengthHeightACD).toBeCloseTo(heightValue);
+        expect(rhombus.lengthHeightBCD).toBeCloseTo(heightValue);
+        expect(rhombus.lengthHeightBDA).toBeCloseTo(heightValue);
+        expect(rhombus.lengthHeightCAB).toBeCloseTo(heightValue);
+        expect(rhombus.lengthHeightCDA).toBeCloseTo(heightValue);
+        expect(rhombus.lengthHeightDAB).toBeCloseTo(heightValue);
+        expect(rhombus.lengthHeightDBC).toBeCloseTo(heightValue);
+    });
 });
