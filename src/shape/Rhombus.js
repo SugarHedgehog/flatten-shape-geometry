@@ -3,7 +3,7 @@ import { Point, Segment } from '@flatten-js/core';
 import degreesToRadians from 'degrees-radians';
 
 export default class Rhombus extends Quadrilateral {
-    constructor(length, angles = {}) {
+    constructor(length, angles = {}, supplementary = {}) {
         super();
         if (length <= 0 || !Number.isFinite(Number(length)))
             throw new TypeError(`Invalid length: Received length is ${JSON.stringify(length)}. Please specify a positive numeric value for the side length.`);
@@ -16,6 +16,14 @@ export default class Rhombus extends Quadrilateral {
         this.#setDiagonals();
         this.#setCoordinates();
         this.addFace(this._vertices);
+
+        const {
+            calculateHeights = false,
+        } = supplementary;
+
+        if(calculateHeights){
+            this._setHeights();
+        }
     }
 
     #setSides(length) {
