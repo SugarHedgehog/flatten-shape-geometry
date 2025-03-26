@@ -1,7 +1,7 @@
 import Parallelogram from '../src/shape/Parallelogram';
-import { Point} from '@flatten-js/core';
+import { Point, Segment} from '@flatten-js/core';
 import degreesToRadians from 'degrees-radians';
-import { shiftCoordinate2D } from '../src/functions/general.js';
+import { shiftCoordinate2D, perpendicular} from '../src/functions/general.js';
 
 describe('Parallelogram', () => {
     it('should create a parallelogram with given side lengths and angles', () => {
@@ -89,5 +89,48 @@ describe('Parallelogram', () => {
         expect(() => new Parallelogram({ lengthAB: 4, lengthBC: 3 }, {})).toThrow(/No angle of the parallelogram is defined/);
         expect(() => new Parallelogram({ lengthAB: 4, lengthBC: 3 }, { angle: {} })).toThrow(/No angle of the parallelogram is defined/);
         expect(() => new Parallelogram({ lengthAB: 4, lengthBC: 3 }, { angle: { angleE: 60 } })).toThrow(/Angles arent difined/);
+    });
+
+    it('should correctly calculate heights when requested', () => {
+        let AB = 8;
+        let BC = 6.3245553203368;
+        let angleA = 71.565051177078;
+
+        const parallelogram = new Parallelogram({ 
+            lengthAB: AB, 
+            lengthBC: BC 
+        }, { 
+            angle: { angleA: angleA }, 
+            angleInDegree: true 
+        }, { 
+            calculateHeights: true 
+        });
+
+        let h1 = perpendicular(new Point(0,0), new Segment(new Point(8,0), new Point(10,6)))[0];
+        let h2 = perpendicular(new Point(0,0), new Segment(new Point(2,6), new Point(10,6)))[0];
+
+        // Height from A to BC
+        expect(parallelogram.lengthHeightABC).toBeCloseTo(h1);
+        
+         // Height from A to CD
+        expect(parallelogram.lengthHeightACD).toBeCloseTo(h2);
+
+        // Height from B to CD
+        expect(parallelogram.lengthHeightBCD).toBeCloseTo(h2);
+
+        // Height from B to DA
+        expect(parallelogram.lengthHeightBDA).toBeCloseTo(h1);
+
+        // Height from C to AB
+        expect(parallelogram.lengthHeightCAB).toBeCloseTo(h2);
+
+        // Height from C to DA
+        expect(parallelogram.lengthHeightCDA).toBeCloseTo(h1);
+
+        // Height from D to AB
+        expect(parallelogram.lengthHeightDAB).toBeCloseTo(h2);
+
+        // Height from D to BC
+        expect(parallelogram.lengthHeightDBC).toBeCloseTo(h1);
     });
 });
