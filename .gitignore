@@ -96,3 +96,4 @@ public
 #Scripts
 dist/find-orphan-modules.js
 dist/stats.json
+.qodo

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trapezoid Class Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .demo-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .code-example {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 20px 0;
+        }
+        .tab-container {
+            margin: 20px 0;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px 4px 0 0;
+            margin-bottom: -1px;
+        }
+        .tab.active {
+            background-color: white;
+            border-bottom: 2px solid #007bff;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 0 4px 4px 4px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Trapezoid Class Demonstration</h1>
+    
+    <div class="tab-container">
+        <div class="tab" onclick="openTab(event, 'tab1')">By Four Sides</div>
+        <div class="tab active" onclick="openTab(event, 'tab2')">By Two Bases and Angle</div>
+    </div>
+
+    <div id="tab1" class="tab-content">
+        <h2>1. Initialization by Four Sides</h2>
+        <div class="code-example">
+            const trapezoid = new Trapezoid({
+                lengths: { lengthAB: 8, lengthBC: 5, lengthCD: 4, lengthDA: 5 },
+                height: 3,
+                angles: {},
+                supplementary: { calculateDiagonals: true }
+            });
+        </div>
+        <div id="basic-init" class="result"></div>
+    </div>
+
+    <div id="tab2" class="tab-content active">
+        <h2>2. Initialization by Two Bases and Angle</h2>
+        <div class="code-example">
+            const trapezoid = new Trapezoid({
+                lengths: { lengthAB: 8, lengthCD: 4 },
+                height: 3,
+                angles: { angleA: Math.PI/3 },
+                supplementary: { calculateDiagonals: true }
+            });
+        </div>
+        <div id="angle-init" class="result"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Trapezoid Properties</h2>
+        <div id="trapezoid-properties" class="result"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Vertices Coordinates</h2>
+        <div id="vertices" class="result"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Diagonals</h2>
+        <div id="diagonals" class="result"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Angles</h2>
+        <div id="angles" class="result"></div>
+    </div>
+
+    <div class="demo-section">
+        <h2>Visualization</h2>
+        <canvas id="trapezoid-canvas" width="400" height="300"></canvas>
+        <div style="margin-top: 10px;">
+            <button id="rotate-trapezoid" style="margin-right: 10px;">Rotate</button>
+            <button id="reset-trapezoid">Reset</button>
+        </div>
+    </div>
+
+    <script src="dist/bundle.js"></script>
+    <script>
+        // Tab management
+        function openTab(evt, tabName) {
+            const tabs = document.getElementsByClassName("tab-content");
+            const buttons = document.getElementsByClassName("tab");
+            
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+                buttons[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            
+            // Reinitialize trapezoid based on selected tab
+            if (tabName === 'tab1') {
+                initializeTrapezoidByFourSides();
+            } else {
+                initializeTrapezoidByTwoBasesAngle();
+            }
+        }
+
+        // Trapezoid initialization functions
+        function initializeTrapezoidByFourSides() {
+            const trapezoid = new Trapezoid({
+                lengths: { lengthAB: 8, lengthBC: 5, lengthCD: 4, lengthDA: 5 },
+                height: 3,
+                angles: {},
+                supplementary: { calculateDiagonals: true }
+            });
+            
+            updateDisplay(trapezoid);
+            document.getElementById('basic-init').innerHTML = `Trapezoid created with:
+    - Side AB: ${trapezoid.lengths.lengthAB}
+    - Side BC: ${trapezoid.lengths.lengthBC}
+    - Side CD: ${trapezoid.lengths.lengthCD}
+    - Side DA: ${trapezoid.lengths.lengthDA}
+    - Height: ${trapezoid.heightDAB}`;
+        }
+
+        function initializeTrapezoidByTwoBasesAngle() {
+            const trapezoid = new Trapezoid({
+                lengths: { lengthAB: 8, lengthCD: 4 },
+                height: 3,
+                angles: { angleA: Math.PI/3 },
+                supplementary: { calculateDiagonals: true }
+            });
+            
+            updateDisplay(trapezoid);
+            document.getElementById('angle-init').innerHTML = `Trapezoid created with:
+    - Base AB: ${trapezoid.lengths.lengthAB}
+    - Base CD: ${trapezoid.lengths.lengthCD}
+    - Height: ${trapezoid.heightDAB}
+    - Angle A: 60°`;
+        }
+
+        // Main update function
+        function updateDisplay(trapezoid) {
+            // Update properties display
+            document.getElementById('trapezoid-properties').innerHTML = `Trapezoid Properties:
+    - Perimeter: ${trapezoid.perimeter}
+    - Area: ${trapezoid.area()}`;
+
+            // Update vertices display
+            const vertices = trapezoid.vertices;
+            let verticesText = 'Vertices coordinates:\n';
+            vertices.forEach((vertex, index) => {
+                verticesText += `- Vertex ${index + 1}: (${vertex.x.toFixed(2)}, ${vertex.y.toFixed(2)})\n`;
+            });
+            document.getElementById('vertices').innerHTML = verticesText;
+
+            // Update diagonals display
+            document.getElementById('diagonals').innerHTML = `Trapezoid Diagonals:
+    - Diagonal AC: ${trapezoid.lengthDiagonalAC}
+    - Diagonal BD: ${trapezoid.lengthDiagonalBD}`;
+
+            // Update angles display
+            document.getElementById('angles').innerHTML = `Trapezoid Angles (in radians):
+    - Angle A: ${trapezoid.angleAInRadians.toFixed(4)} (${(trapezoid.angleAInRadians * 180 / Math.PI).toFixed(2)}°)
+    - Angle B: ${trapezoid.angleBInRadians.toFixed(4)} (${(trapezoid.angleBInRadians * 180 / Math.PI).toFixed(2)}°)
+    - Angle C: ${trapezoid.angleCInRadians.toFixed(4)} (${(trapezoid.angleCInRadians * 180 / Math.PI).toFixed(2)}°)
+    - Angle D: ${trapezoid.angleDInRadians.toFixed(4)} (${(trapezoid.angleDInRadians * 180 / Math.PI).toFixed(2)}°)`;
+
+            // Update visualization
+            drawTrapezoid(trapezoid);
+        }
+
+        // Visualization functions
+        const canvas = document.getElementById('trapezoid-canvas');
+        const ctx = canvas.getContext('2d');
+        let rotation = 0;
+
+        function drawTrapezoid(trapezoid) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Center of canvas
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            // Scale factor to fit canvas
+            const scale = Math.min(canvas.width, canvas.height) / (trapezoid.lengths.lengthAB * 3);
+
+            // Draw coordinate axes
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(canvas.width, centerY);
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, canvas.height);
+            ctx.stroke();
+
+            // Draw trapezoid
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(rotation);
+
+            ctx.strokeStyle = '#007bff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            const vertices = trapezoid.vertices;
+            ctx.moveTo(vertices[0].x * scale, vertices[0].y * scale);
+            for (let i = 1; i < vertices.length; i++) {
+                ctx.lineTo(vertices[i].x * scale, vertices[i].y * scale);
+            }
+            ctx.closePath();
+            ctx.stroke();
+
+            // Fill with semi-transparent color
+            ctx.fillStyle = 'rgba(0, 123, 255, 0.2)';
+            ctx.fill();
+
+            // Label vertices
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            vertices.forEach((vertex, index) => {
+                const label = String.fromCharCode(65 + index); // A, B, C, D
+                ctx.fillText(label, vertex.x * scale + 5, vertex.y * scale - 5);
+            });
+
+            ctx.restore();
+        }
+
+        // Event listeners
+        document.getElementById('reset-trapezoid').addEventListener('click', function () {
+            if (document.querySelector('.tab.active').id === 'tab1') {
+                initializeTrapezoidByFourSides();
+            } else {
+                initializeTrapezoidByTwoBasesAngle();
+            }
+        });
+
+        document.getElementById('rotate-trapezoid').addEventListener('click', function () {
+            rotation += Math.PI / 12;
+            const trapezoid = document.querySelector('.tab.active').id === 'tab1' ? 
+                new Trapezoid({
+                    lengths: { lengthAB: 8, lengthBC: 5, lengthCD: 4, lengthDA: 5 },
+                    height: 3,
+                    angles: {},
+                    supplementary: { calculateDiagonals: true }
+                }) :
+                new Trapezoid({
+                    lengths: { lengthAB: 8, lengthCD: 4 },
+                    height: 3,
+                    angles: { angleA: Math.PI/3 },
+                    supplementary: { calculateDiagonals: true }
+                });
+            
+            updateDisplay(trapezoid);
+        });
+
+        // Initialize with first tab
+        initializeTrapezoidByTwoBasesAngle();
+    </script>
+</body>
+</html>

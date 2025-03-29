@@ -7,6 +7,7 @@ import Square from './src/shape/Square';
 import Rectangle from './src/shape/Rectangle';
 import Rhombus from './src/shape/Rhombus';
 import Parallelogram from './src/shape/Parallelogram';
+import Trapezoid from './src/shape/Trapezoid';
 
 window.isValidTriangle = isValidTriangle;
 window.calculateThirdSideUsingCosineLaw = calculateThirdSideUsingCosineLaw;
@@ -16,3 +17,4 @@ window.Square = Square;
 window.Rectangle = Rectangle;
 window.Rhombus = Rhombus;
 window.Parallelogram = Parallelogram;
+window.Trapezoid = Trapezoid;

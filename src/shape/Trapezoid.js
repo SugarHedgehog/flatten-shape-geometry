@@ -15,6 +15,7 @@ export default class Trapezoid extends Quadrilateral {
                 break;
             case Object.keys(lengths).length >= 2 && height !== 0 && Object.keys(angles).length === 1:
                 const angleKey = Object.keys(angles)[0];
+                this._isAngleInDegree = angles.angleInDegree || false;
                 const angleInRadians = this._isAngleInDegree ? degreesToRadians(angles[angleKey]) : angles[angleKey];
                 vertices = this._trapezoidByTwoBasesHeightAngle(lengths, height, angleKey, angleInRadians);
                 break;
@@ -53,7 +54,7 @@ export default class Trapezoid extends Quadrilateral {
     _trapezoidByLengths(lengths) {
         Object.keys(lengths).forEach((key) => {
             if (!['lengthAB', 'lengthBC', 'lengthCD', 'lengthDA'].includes(key))
-                throw new Error(`Four lengths are not difined. ${JSON.stringify(lengths)}`);
+                throw new Error(`Four lengths are not defined. ${JSON.stringify(lengths)}`);
             if (!Number.isFinite(Number(lengths[key])))
                 throw new Error(`length is not positive numeric value. ${key}: ${lengths[key]}`);
         });
