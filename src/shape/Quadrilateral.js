@@ -1,6 +1,7 @@
 import ShapeWithConnectionMatrix from '../shape/Shape';
 import radiansToDegrees from 'radians-degrees';
 import {perpendicular} from '../functions/general'
+import { Segment } from '@flatten-js/core';
 
 export default class Quadrilateral extends ShapeWithConnectionMatrix{
     _isAngleInDegree;
@@ -227,7 +228,7 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
     }
 
     get diagonalIntersectionPoint() {
-        return this._diagonalAC.intersect(this._diagonalBD)[0];
+        return new Segment(this.pointA, this.pointC).intersect(new Segment(this.pointB, this.pointD))[0];
     }
 
     get perimeter() {
