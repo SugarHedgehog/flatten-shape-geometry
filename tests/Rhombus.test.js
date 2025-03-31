@@ -4,7 +4,12 @@ import degreesToRadians from 'degrees-radians';
 
 describe('Rhombus', () => {
     it('should create a rhombus with given length and angles', () => {
-        const rhombus = new Rhombus(2, { angle: { angleA: 60 } });
+        const rhombus = new Rhombus({ 
+            length: 2, 
+            angles: { 
+                angle: { angleA: 60 } 
+            } 
+        });
         expect(rhombus.lengthAB).toBe(2);
         expect(rhombus.lengthBC).toBe(2);
         expect(rhombus.lengthCD).toBe(2);
@@ -12,7 +17,13 @@ describe('Rhombus', () => {
     });
 
     it('should have correct angles in radians and degrees', () => {
-        const rhombus = new Rhombus(2, { angle: { angleA: 60 }, angleInDegree: true });
+        const rhombus = new Rhombus({
+            length: 2,
+            angles: { 
+                angle: { angleA: 60 },
+                angleInDegree: true 
+            }
+        });
         expect(rhombus.angleAInRadians).toBeCloseTo(degreesToRadians(60));
         expect(rhombus.angleBInRadians).toBeCloseTo(degreesToRadians(120));
         expect(rhombus.angleCInRadians).toBeCloseTo(degreesToRadians(60));
@@ -25,7 +36,13 @@ describe('Rhombus', () => {
     });
 
     it('should have correct diagonal lengths', () => {
-        const rhombus = new Rhombus(2, { angle: { angleA: 60 }, angleInDegree: true });
+        const rhombus = new Rhombus({
+            length: 2,
+            angles: { 
+                angle: { angleA: 60 },
+                angleInDegree: true 
+            }
+        });
         const d1 = 2 * 2 * Math.cos(degreesToRadians(60) / 2);
         const d2 = 2 * 2 * Math.sin(degreesToRadians(60) / 2);
         expect(rhombus.lengthDiagonalAC).toBeCloseTo(d1);
@@ -33,7 +50,13 @@ describe('Rhombus', () => {
     });
 
     it('should have correct vertex coordinates', () => {
-        const rhombus = new Rhombus(2, { angle: { angleA: 60 }, angleInDegree: true });
+        const rhombus = new Rhombus({
+            length: 2,
+            angles: { 
+                angle: { angleA: 60 },
+                angleInDegree: true 
+            }
+        });
         const d1 = 2 * 2 * Math.cos(degreesToRadians(60) / 2);
         const d2 = 2 * 2 * Math.sin(degreesToRadians(60) / 2);
 
@@ -48,29 +71,57 @@ describe('Rhombus', () => {
     });
 
     it('should correctly calculate perimeter and area', () => {
-        const rhombus = new Rhombus(2, { angle: { angleA: 60 }, angleInDegree: true });
+        const rhombus = new Rhombus({
+            length: 2,
+            angles: { 
+                angle: { angleA: 60 },
+                angleInDegree: true 
+            }
+        });
         expect(rhombus.perimeter).toBe(8);
         expect(rhombus.area()).toBeCloseTo(2 * 2 * Math.sin(degreesToRadians(60)));
     });
 
     it('should throw an exception for invalid length', () => {
-        expect(() => new Rhombus(-1, { angle: { angleA: 60 } })).toThrow(/Invalid length/);
-        expect(() => new Rhombus("test", { angle: { angleA: 60 } })).toThrow(/Invalid length/);
-        expect(() => new Rhombus(NaN, { angle: { angleA: 60 } })).toThrow(/Invalid length/);
+        expect(() => new Rhombus({ 
+            length: -1, 
+            angles: { angle: { angleA: 60 } } 
+        })).toThrow(/Invalid length/);
+        expect(() => new Rhombus({ 
+            length: "test", 
+            angles: { angle: { angleA: 60 } } 
+        })).toThrow(/Invalid length/);
+        expect(() => new Rhombus({ 
+            length: NaN, 
+            angles: { angle: { angleA: 60 } } 
+        })).toThrow(/Invalid length/);
     });
 
     it('should throw an exception for invalid angles', () => {
-        expect(() => new Rhombus(2, {})).toThrow(/No angle of the rhombus is defined/);
-        expect(() => new Rhombus(2, { angle: {} })).toThrow(/No angle of the rhombus is defined/);
-        expect(() => new Rhombus(2, { angle: { angleE: 60 } })).toThrow(/Angles are not defined/);
+        expect(() => new Rhombus({ 
+            length: 2,
+            angles: {} 
+        })).toThrow(/No angle of the rhombus is defined/);
+        expect(() => new Rhombus({ 
+            length: 2,
+            angles: { angle: {} } 
+        })).toThrow(/No angle of the rhombus is defined/);
+        expect(() => new Rhombus({ 
+            length: 2,
+            angles: { angle: { angleE: 60 } } 
+        })).toThrow(/Angles are not defined/);
     });
 
     it('should correctly calculate all heights with proper options', () => {
-        const rhombus = new Rhombus(2, { 
-            angle: { angleA: 60 }, 
-            angleInDegree: true 
-        }, { 
-            calculateHeights: true 
+        const rhombus = new Rhombus({
+            length: 2,
+            angles: { 
+                angle: { angleA: 60 },
+                angleInDegree: true 
+            },
+            supplementary: {
+                calculateHeights: true
+            }
         });
     
         const heightValue = 2 * Math.sin(degreesToRadians(60));

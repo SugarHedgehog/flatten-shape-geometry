@@ -3,13 +3,20 @@ import { Point, Segment } from '@flatten-js/core';
 import degreesToRadians from 'degrees-radians';
 
 export default class Rhombus extends Quadrilateral {
-    constructor(length, angles = {}, supplementary = {}) {
+    constructor({ 
+        length, 
+        angles = {}, 
+        supplementary = {} 
+    }) {
         super();
-        if (length <= 0 || !Number.isFinite(Number(length)))
+        
+        if (!length || length <= 0 || !Number.isFinite(Number(length))) {
             throw new TypeError(`Invalid length: Received length is ${JSON.stringify(length)}. Please specify a positive numeric value for the side length.`);
+        }
 
-        if (!angles.angle || typeof angles.angle !== 'object' || Object.keys(angles.angle).length === 0)
+        if (!angles.angle || typeof angles.angle !== 'object' || Object.keys(angles.angle).length === 0) {
             throw new TypeError(`No angle of the rhombus is defined`);
+        }
 
         this.#setSides(length);
         this.#setAngles(angles);
@@ -21,7 +28,7 @@ export default class Rhombus extends Quadrilateral {
             calculateHeights = false,
         } = supplementary;
 
-        if(calculateHeights){
+        if(calculateHeights) {
             this._setHeights();
         }
     }
@@ -50,8 +57,9 @@ export default class Rhombus extends Quadrilateral {
         }
 
         let angle = angles[keyAngle];
-        if (!Number.isFinite(Number(angle)))
+        if (!Number.isFinite(Number(angle))) {
             throw new TypeError(`Invalid angle: Received angle is ${JSON.stringify(angle)}. Please specify a numeric value for the angle.`);
+        }
 
         angle = this._isAngleInDegree ? degreesToRadians(angle) : angle;
         let angleOther = Math.PI - angle;
