@@ -33,6 +33,21 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
     constructor() {
         super();
     }
+    _checkDiagonal(value, propertyName) {
+        if (value === undefined || value === null) {
+            throw new Error(`${propertyName} is not defined. Use "supplementary:{calculateDiagonals:true}"`);
+        }
+    }
+
+    _checkHeight(value, propertyName) {
+        if (value === undefined || value === null) {
+            if (this instanceof Square || this instanceof Rectangle) {
+                throw new Error(`${propertyName} is not defined for Square or Rectangle.`);
+            } else {
+                throw new Error(`${propertyName} is not defined. Use "supplementary:{calculateHeights:true}"`);
+            }
+        }
+    }
 
     _setDiagonals(){
         let diagonalAC =  this._pointA.distanceTo(this._pointC);
@@ -148,82 +163,102 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
     }
 
     get heightABC(){
+        this._checkHeight(this._heightABC, 'heightABC');
         return this._heightABC;
     }
 
     get heightACD(){
+        this._checkHeight(this._heightACD, 'heightACD');
         return this._heightACD;
     }
 
     get heightBCD(){
+        this._checkHeight(this._heightBCD, 'heightBCD');
         return this._heightBCD;
     }
     
     get heightBDA(){
+        this._checkHeight(this._heightBDA, 'heightBDA');
         return this._heightBDA;
     }
 
     get heightCAB(){
+        this._checkHeight(this._heightCAB, 'heightCAB');
         return this._heightCAB;
     }
 
     get heightCDA(){
+        this._checkHeight(this._heightCDA, 'heightCDA');
         return this._heightCDA;
     }
 
     get heightDAB(){
+        this._checkHeight(this._heightDAB, 'heightDAB');
         return this._heightDAB;
     }
 
     get heightDBC(){
+        this._checkHeight(this._heightDBC, 'heightDBC');
         return this._heightDBC;
     }
 
     get lengthHeightABC(){
-        return this.heightABC.length;
+        this._checkHeight(this._heightABC, 'lengthHeightABC');
+        return this._heightABC?.length;
     }
 
     get lengthHeightACD(){
-        return this.heightACD.length;
+        this._checkHeight(this._heightACD, 'lengthHeightACD');
+        return this._heightACD?.length;
     }
 
     get lengthHeightBCD(){
-        return this.heightBCD.length;
+        this._checkHeight(this._heightBCD, 'lengthHeightBCD');
+        return this._heightBCD?.length;
     }
     
     get lengthHeightBDA(){
-        return this.heightBDA.length;
+        this._checkHeight(this._heightBDA, 'lengthHeightBDA');
+        return this._heightBDA?.length;
     }
 
     get lengthHeightCAB(){
-        return this.heightCAB.length;
+        this._checkHeight(this._heightCAB, 'lengthHeightCAB');
+        return this._heightCAB?.length;
     }
 
     get lengthHeightCDA(){
-        return this.heightCDA.length;
+        this._checkHeight(this._heightCDA, 'lengthHeightCDA');
+        return this._heightCDA?.length;
     }
 
     get lengthHeightDAB(){
-        return this.heightDAB.length;
+        this._checkHeight(this._heightDAB, 'lengthHeightDAB');
+        return this._heightDAB?.length;
     }
 
     get lengthHeightDBC(){
-        return this.heightDBC.length;
+        this._checkHeight(this._heightDBC, 'lengthHeightDBC');
+        return this._heightDBC?.length;
     }
 
     get diagonalAC(){
+        this._checkDiagonal(this._diagonalAC, 'diagonalAC');
         return this._diagonalAC;
     }
 
     get diagonalBD(){
+        this._checkDiagonal(this._diagonalBD, 'diagonalBD');
         return this._diagonalBD;
     }
 
     get lengthDiagonalAC(){
+        this._checkDiagonal(this._lengthDiagonalAC, 'lengthDiagonalAC');
         return this._lengthDiagonalAC;
     }
 
     get lengthDiagonalBD(){
+        this._checkDiagonal(this._lengthDiagonalBD, 'lengthDiagonalBD');
         return this._lengthDiagonalBD;
     }
 
