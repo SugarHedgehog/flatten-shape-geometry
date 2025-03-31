@@ -3,20 +3,26 @@ import { Point } from '@flatten-js/core';
 import { shiftCoordinate2D } from '../functions/general.js'
 
 export default class Square extends Quadrilateral {
-    constructor(length, supplementary = {}) {
+    constructor({ 
+        length, 
+        supplementary = {} 
+    }) {
         super();
-        if (length <= 0 || !Number.isFinite(Number(length)))
+        
+        if (!length || length <= 0 || !Number.isFinite(Number(length))) {
             throw new TypeError(`Invalid length: Received length is ${JSON.stringify(length)}. Please specify a positive numeric value for the side length.`);
-        this.#setSides(length)
+        }
+
+        this.#setSides(length);
         this.#setAngles();
-        this.#setCoordites(length);
+        this.#setCoordinates();
         this.addFace(this._vertices);
 
         const {
             calculateDiagonals = false,
         } = supplementary;
 
-        if(calculateDiagonals){
+        if(calculateDiagonals) {
             this._setDiagonals();
         }
     }
@@ -36,8 +42,8 @@ export default class Square extends Quadrilateral {
     }
 
 
-    #setCoordites() {
-        let length = this._lengthAB;
+    #setCoordinates() {
+        const length = this._lengthAB;
         const A = new Point(0, 0);
         const B = new Point(length, 0);
         const C = new Point(length, length);
