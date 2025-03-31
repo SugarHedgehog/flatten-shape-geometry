@@ -4,7 +4,7 @@ import degreesToRadians from 'degrees-radians';
 import { shiftCoordinate2D } from '../functions/general.js'
 
 export default class Parallelogram extends Quadrilateral {
-    constructor(lengths = {}, angles = {}, supplementary = {}) {
+    constructor({lengths = {}, angles = {}, supplementary = {}} = {}) {
         super();
 
         if (Object.keys(lengths).length < 2)
@@ -52,10 +52,10 @@ export default class Parallelogram extends Quadrilateral {
                         this._lengthDA = lengthOfSide;
                         break;
                     default:
-                        throw new Error(`Lengths arent difined. ${JSON.stringify(lengths)}`);
+                        throw new Error(`Lengths aren't defined. ${JSON.stringify(lengths)}`);
                 }
             }else{
-                throw new Error(`Length isnt positive numeric value. ${key}:${lengthOfSide}`);
+                throw new Error(`Length isn't a positive numeric value. ${key}:${lengthOfSide}`);
             }}
         );
     }
@@ -73,7 +73,7 @@ export default class Parallelogram extends Quadrilateral {
         let angle = angles[keyAngle];
         
         if(!Number.isFinite(angle))
-            throw new Error(`Angle isnt numeric value. ${keyAngle}:${angle}`);
+            throw new Error(`Angle isn't a numeric value. ${keyAngle}:${angle}`);
 
         angle = this._isAngleInDegree ? degreesToRadians(angle) : angle;
         let angleOther = Math.PI - angle;
@@ -94,7 +94,7 @@ export default class Parallelogram extends Quadrilateral {
                 this._angleDInRadians = angle;
                 break;
             default:
-                throw new Error('Angles arent difined');
+                throw new Error('Angles aren\'t defined');
         }
     }
 

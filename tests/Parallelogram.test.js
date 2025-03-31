@@ -5,15 +5,18 @@ import { shiftCoordinate2D, perpendicular} from '../src/functions/general.js';
 
 describe('Parallelogram', () => {
     it('should create a parallelogram with given side lengths and angles', () => {
-        const parallelogram = new Parallelogram({ lengthAB: 4, lengthBC: 3 }, { angle: { angleA: 60 }, angleInDegree: true });
-        expect(parallelogram.lengthAB).toBeCloseTo(4);
-        expect(parallelogram.lengthBC).toBeCloseTo(3);
-        expect(parallelogram.lengthCD).toBeCloseTo(4);
-        expect(parallelogram.lengthDA).toBeCloseTo(3);
+        const parallelogram = new Parallelogram({
+            lengths: { lengthAB: 4, lengthBC: 3 },
+            angles: { angle: { angleA: 60 }, angleInDegree: true }
+        });
+        expect(parallelogram._lengthAB).toBeCloseTo(4);
+        expect(parallelogram._lengthBC).toBeCloseTo(3);
+        expect(parallelogram._lengthCD).toBeCloseTo(4);
+        expect(parallelogram._lengthDA).toBeCloseTo(3);
     });
 
     it('should have correct angles in radians and degrees', () => {
-        const parallelogram = new Parallelogram({ lengthAB: 4, lengthBC: 3 }, { angle: { angleA: 60 }, angleInDegree: true });
+        const parallelogram = new Parallelogram({lengths:{ lengthAB: 4, lengthBC: 3 }, angles:{ angle: { angleA: 60 }, angleInDegree: true }});
         expect(parallelogram.angleAInRadians).toBeCloseTo(degreesToRadians(60));
         expect(parallelogram.angleBInRadians).toBeCloseTo(degreesToRadians(120));
         expect(parallelogram.angleCInRadians).toBeCloseTo(degreesToRadians(60));
@@ -26,7 +29,10 @@ describe('Parallelogram', () => {
     });
 
     it('should have correct vertex coordinates', () => {
-        const parallelogram = new Parallelogram({ lengthAB: 4, lengthBC: 3 }, { angle: { angleA: 60 }, angleInDegree: true });
+        const parallelogram = new Parallelogram({
+            lengths: { lengthAB: 4, lengthBC: 3 },
+            angles: { angle: { angleA: 60 }, angleInDegree: true }
+        });
         const x = 3 * Math.cos(degreesToRadians(60));
         const y = 3 * Math.sin(degreesToRadians(60));
 
@@ -48,13 +54,20 @@ describe('Parallelogram', () => {
     });
 
     it('should correctly calculate perimeter and area', () => {
-        const parallelogram = new Parallelogram({ lengthAB: 4, lengthBC: 3 }, { angle: { angleA: 60 }, angleInDegree: true });
+        const parallelogram = new Parallelogram({
+            lengths: { lengthAB: 4, lengthBC: 3 },
+            angles: { angle: { angleA: 60 }, angleInDegree: true }
+        });
         expect(parallelogram.perimeter).toBe(14);
         expect(parallelogram.area()).toBeCloseTo(4 * 3 * Math.sin(degreesToRadians(60)));
     });
 
     it('should correctly calculate diagonals when requested', () => {
-        const parallelogram = new Parallelogram({ lengthAB: 4, lengthBC: 3 }, { angle: { angleA: 60 }, angleInDegree: true }, { calculateDiagonals: true });
+        const parallelogram = new Parallelogram({
+            lengths: { lengthAB: 4, lengthBC: 3 },
+            angles: { angle: { angleA: 60 }, angleInDegree: true },
+            supplementary: { calculateDiagonals: true }
+        });
         const d1 = Math.sqrt(4**2 + 3**2 + 2*4*3*Math.cos(degreesToRadians(60)));
         const d2 = Math.sqrt(4**2 + 3**2 - 2*4*3*Math.cos(degreesToRadians(60)));
 
@@ -79,35 +92,41 @@ describe('Parallelogram', () => {
     });
 
     it('should throw an exception for invalid lengths', () => {
-        expect(() => new Parallelogram({}, {})).toThrow(/No lengths of the parallelogram are defined/);
-        expect(() => new Parallelogram({ lengthAB: -1, lengthBC: 2 }, {})).toThrow(/Length isnt positive numeric value/);
-        expect(() => new Parallelogram({ lengthAB: "test", lengthBC: 2 }, {})).toThrow(/Length isnt positive numeric value/);
-        expect(() => new Parallelogram({ lengthAB: 2, lengthCD: 3 }, {})).toThrow(/Two parallel sides of a parallelogram are given/);
+        expect(() => new Parallelogram({})).toThrow(/No lengths of the parallelogram are defined/);
+        expect(() => new Parallelogram({
+            lengths: { lengthAB: -1, lengthBC: 2 }
+        })).toThrow(/Length isn't a positive numeric value/);
+        expect(() => new Parallelogram({
+            lengths: { lengthAB: "test", lengthBC: 2 }
+        })).toThrow(/Length isn't a positive numeric value/);
+        expect(() => new Parallelogram({
+            lengths: { lengthAB: 2, lengthCD: 3 }
+        })).toThrow(/Two parallel sides of a parallelogram are given/);
     });
 
     it('should throw an exception for invalid angles', () => {
-        expect(() => new Parallelogram({ lengthAB: 4, lengthBC: 3 }, {})).toThrow(/No angle of the parallelogram is defined/);
-        expect(() => new Parallelogram({ lengthAB: 4, lengthBC: 3 }, { angle: {} })).toThrow(/No angle of the parallelogram is defined/);
-        expect(() => new Parallelogram({ lengthAB: 4, lengthBC: 3 }, { angle: { angleE: 60 } })).toThrow(/Angles arent difined/);
+        expect(() => new Parallelogram({
+            lengths: { lengthAB: 4, lengthBC: 3 }
+        })).toThrow(/No angle of the parallelogram is defined/);
+        expect(() => new Parallelogram({
+            lengths: { lengthAB: 4, lengthBC: 3 },
+            angles: { angle: {} }
+        })).toThrow(/No angle of the parallelogram is defined/);
+        expect(() => new Parallelogram({
+            lengths: { lengthAB: 4, lengthBC: 3 },
+            angles: { angle: { angleE: 60 } }
+        })).toThrow(/Angles aren't defined/);
     });
 
     it('should correctly calculate heights when requested', () => {
-        let AB = 8;
-        let BC = 6.3245553203368;
-        let angleA = 71.565051177078;
-
-        const parallelogram = new Parallelogram({ 
-            lengthAB: AB, 
-            lengthBC: BC 
-        }, { 
-            angle: { angleA: angleA }, 
-            angleInDegree: true 
-        }, { 
-            calculateHeights: true 
+        const parallelogram = new Parallelogram({
+            lengths: { lengthAB: 8, lengthBC: 6.3245553203368 },
+            angles: { angle: { angleA: 71.565051177078 }, angleInDegree: true },
+            supplementary: { calculateHeights: true }
         });
 
-        let h1 = perpendicular(new Point(0,0), new Segment(new Point(8,0), new Point(10,6)))[0];
-        let h2 = perpendicular(new Point(0,0), new Segment(new Point(2,6), new Point(10,6)))[0];
+        const h1 = perpendicular(new Point(0,0), new Segment(new Point(8,0), new Point(10,6)))[0];
+        const h2 = perpendicular(new Point(0,0), new Segment(new Point(2,6), new Point(10,6)))[0];
 
         // Height from A to BC
         expect(parallelogram.lengthHeightABC).toBeCloseTo(h1);
