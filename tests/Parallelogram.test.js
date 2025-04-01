@@ -9,10 +9,10 @@ describe('Parallelogram', () => {
             lengths: { lengthAB: 4, lengthBC: 3 },
             angles: { angle: { angleA: 60 }, angleInDegree: true }
         });
-        expect(parallelogram._lengthAB).toBeCloseTo(4);
-        expect(parallelogram._lengthBC).toBeCloseTo(3);
-        expect(parallelogram._lengthCD).toBeCloseTo(4);
-        expect(parallelogram._lengthDA).toBeCloseTo(3);
+        expect(parallelogram.lengthAB).toBeCloseTo(4);
+        expect(parallelogram.lengthBC).toBeCloseTo(3);
+        expect(parallelogram.lengthCD).toBeCloseTo(4);
+        expect(parallelogram.lengthDA).toBeCloseTo(3);
     });
 
     it('should have correct angles in radians and degrees', () => {
@@ -94,13 +94,16 @@ describe('Parallelogram', () => {
     it('should throw an exception for invalid lengths', () => {
         expect(() => new Parallelogram({})).toThrow(/No lengths of the parallelogram are defined/);
         expect(() => new Parallelogram({
-            lengths: { lengthAB: -1, lengthBC: 2 }
+            lengths: { lengthAB: -1, lengthBC: 2 },
+            angles: { angle: { angleA: 60 } }
         })).toThrow(/Length isn't a positive numeric value/);
         expect(() => new Parallelogram({
-            lengths: { lengthAB: "test", lengthBC: 2 }
+            lengths: { lengthAB: "test", lengthBC: 2 },
+            angles: { angle: { angleA: 60 } }
         })).toThrow(/Length isn't a positive numeric value/);
         expect(() => new Parallelogram({
-            lengths: { lengthAB: 2, lengthCD: 3 }
+            lengths: { lengthAB: 2, lengthCD: 3 },
+            angles: { angle: { angleA: 60 } }
         })).toThrow(/Two parallel sides of a parallelogram are given/);
     });
 

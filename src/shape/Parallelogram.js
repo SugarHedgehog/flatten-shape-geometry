@@ -13,13 +13,11 @@ export default class Parallelogram extends Quadrilateral {
         if(('lengthAB' in lengths || 'lengthBC' in lengths) && ('lengthCD' in lengths || 'lengthDA' in lengths))
             throw new Error(`Two parallel sides of a parallelogram are given. ${JSON.stringify(lengths)}`);
 
-        this.#setSides(lengths);
-
         if (!angles.angle || typeof angles.angle !== 'object' || Object.keys(angles.angle).length === 0)
             throw new TypeError(`No angle of the parallelogram is defined. ${JSON.stringify(angles)}`);
         
         this.#setAngles(angles);
-        this.#setCoordinates();
+        this.#setCoordinates(lengths);
         this.addFace(this._vertices);
 
         const {
@@ -34,30 +32,6 @@ export default class Parallelogram extends Quadrilateral {
         if(calculateHeights){
             this._setHeights();
         }
-    }
-
-    #setSides(lengths) {
-        Object.keys(lengths).forEach(key => {
-            let lengthOfSide = lengths[key];
-            if(lengthOfSide>0 && Number.isFinite(Number(lengthOfSide))){
-                switch(key){
-                    case 'lengthAB':
-                    case 'lengthCD': 
-                        this._lengthAB = lengthOfSide;
-                        this._lengthCD = lengthOfSide;
-                        break;
-                    case 'lengthBC':
-                    case 'lengthDA':   
-                        this._lengthBC = lengthOfSide;
-                        this._lengthDA = lengthOfSide;
-                        break;
-                    default:
-                        throw new Error(`Lengths aren't defined. ${JSON.stringify(lengths)}`);
-                }
-            }else{
-                throw new Error(`Length isn't a positive numeric value. ${key}:${lengthOfSide}`);
-            }}
-        );
     }
 
     #setAngles(angles) {
@@ -98,13 +72,36 @@ export default class Parallelogram extends Quadrilateral {
         }
     }
 
-    #setCoordinates() {
-        let x = this._lengthDA*Math.cos(this._angleAInRadians)
-        let y = this._lengthDA*Math.sin(this._angleAInRadians);
+    #setCoordinates(lengths) {
+        let sideAB, sideBC;
+
+        Object.keys(lengths).forEach(key => {
+            const lengthOfSide = lengths[key];
+            if(lengthOfSide > 0 && Number.isFinite(Number(lengthOfSide))){
+                switch(key){
+                    case 'lengthAB':
+                    case 'lengthCD': 
+                        sideAB = lengthOfSide;
+                        break;
+                    case 'lengthBC':
+                    case 'lengthDA':   
+                        sideBC = lengthOfSide;
+                        break;
+                    default:
+                        throw new Error(`Lengths aren't defined. ${JSON.stringify(lengths)}`);
+                }
+            } else {
+                throw new Error(`Length isn't a positive numeric value. ${key}:${lengthOfSide}`);
+            }
+        });
+
+
+        let x = sideBC * Math.cos(this._angleAInRadians);
+        let y = sideBC * Math.sin(this._angleAInRadians);
 
         const A = new Point(0, 0);
-        const B = new Point(this._lengthAB, 0);
-        const C = new Point(this._lengthAB + x, y);
+        const B = new Point(sideAB, 0);
+        const C = new Point(sideAB + x, y);
         const D = new Point(x, y);
 
         let point = new Segment(A,C).intersect(new Segment(B,D))[0];
@@ -112,5 +109,4 @@ export default class Parallelogram extends Quadrilateral {
         [this._pointA, this._pointB, this._pointC, this._pointD] = [A, B, C, D].map((vertex) => shiftCoordinate2D(vertex, point));
         this._vertices = [this._pointA, this._pointB, this._pointC, this._pointD];
     }
-
 }
