@@ -18,9 +18,8 @@ export default class Rhombus extends Quadrilateral {
             throw new TypeError(`No angle of the rhombus is defined`);
         }
 
-        this.#setSides(length);
         this.#setAngles(angles);
-        this.#setDiagonals();
+        this.#setDiagonals(length);
         this.#setCoordinates();
         this.addFace(this._vertices);
 
@@ -31,13 +30,6 @@ export default class Rhombus extends Quadrilateral {
         if(calculateHeights) {
             this._setHeights();
         }
-    }
-
-    #setSides(length) {
-        this._lengthAB = length;
-        this._lengthBC = length;
-        this._lengthCD = length;
-        this._lengthDA = length;
     }
 
     #setAngles(angles) {
@@ -84,12 +76,11 @@ export default class Rhombus extends Quadrilateral {
         }
     }
 
-    #setDiagonals() {
-        const a = this._lengthAB;
+    #setDiagonals(length) {
         const angle = this._angleAInRadians;
 
-        const d1 = 2 * a * Math.cos(angle / 2);
-        const d2 = 2 * a * Math.sin(angle / 2);
+        const d1 = 2 * length * Math.cos(angle / 2);
+        const d2 = 2 * length * Math.sin(angle / 2);
 
         this._lengthDiagonalAC = d1;
         this._lengthDiagonalBD = d2;
