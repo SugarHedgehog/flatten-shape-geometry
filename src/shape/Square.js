@@ -13,9 +13,8 @@ export default class Square extends Quadrilateral {
             throw new TypeError(`Invalid length: Received length is ${JSON.stringify(length)}. Please specify a positive numeric value for the side length.`);
         }
 
-        this.#setSides(length);
         this.#setAngles();
-        this.#setCoordinates();
+        this.#setCoordinates(length);
         this.addFace(this._vertices);
 
         const {
@@ -27,13 +26,6 @@ export default class Square extends Quadrilateral {
         }
     }
 
-    #setSides(length) {
-        this._lengthAB = length;
-        this._lengthBC = length;
-        this._lengthCD = length;
-        this._lengthDA = length;
-    }
-
     #setAngles() {
         this._angleAInRadians = Math.PI / 2;
         this._angleBInRadians = Math.PI / 2;
@@ -42,8 +34,7 @@ export default class Square extends Quadrilateral {
     }
 
 
-    #setCoordinates() {
-        const length = this._lengthAB;
+    #setCoordinates(length) {
         const A = new Point(0, 0);
         const B = new Point(length, 0);
         const C = new Point(length, length);
