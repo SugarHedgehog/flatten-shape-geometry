@@ -32,6 +32,11 @@ export default class Quadrilateral extends ShapeWithConnectionMatrix{
 
     constructor() {
         super();
+        this._connectionMatrix = [
+            [1],
+            [0, 1],
+            [1, 0, 1]
+        ];
     }
     _checkDiagonal(value, propertyName) {
         if (value === undefined || value === null) {
