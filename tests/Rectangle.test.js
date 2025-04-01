@@ -4,7 +4,12 @@ import { shiftCoordinate2D } from '../src/functions/general.js';
 
 describe('Rectangle', () => {
     it('should create a rectangle with given width and height', () => {
-        const rect = new Rectangle({ width: 4, height: 2 });
+        const rect = new Rectangle({ 
+            lengths: { 
+                lengthAB: 4, 
+                lengthBC: 2 
+            } 
+        });
         expect(rect.lengthAB).toBe(4);
         expect(rect.lengthBC).toBe(2);
         expect(rect.lengthCD).toBe(4);
@@ -12,7 +17,12 @@ describe('Rectangle', () => {
     });
 
     it('should have all angles equal to 90 degrees', () => {
-        const rect = new Rectangle({ width: 4, height: 2 });
+        const rect = new Rectangle({ 
+            lengths: { 
+                lengthAB: 4, 
+                lengthBC: 2 
+            } 
+        });
         expect(rect.angleAInRadians).toBeCloseTo(Math.PI / 2);
         expect(rect.angleBInRadians).toBeCloseTo(Math.PI / 2);
         expect(rect.angleCInRadians).toBeCloseTo(Math.PI / 2);
@@ -25,7 +35,12 @@ describe('Rectangle', () => {
     });
 
     it('should have correct vertex coordinates', () => {
-        const rect = new Rectangle({ width: 4, height: 2 });
+        const rect = new Rectangle({ 
+            lengths: { 
+                lengthAB: 4, 
+                lengthBC: 2 
+            } 
+        });
         const expectedPoints = [
             new Point(0, 0),
             new Point(4, 0),
@@ -44,13 +59,26 @@ describe('Rectangle', () => {
     });
 
     it('should correctly calculate perimeter and area', () => {
-        const rect = new Rectangle({ width: 4, height: 2 });
+        const rect = new Rectangle({ 
+            lengths: { 
+                lengthAB: 4, 
+                lengthBC: 2 
+            } 
+        });
         expect(rect.perimeter).toBe(12);
         expect(rect.area()).toBe(8);
     });
 
     it('should correctly calculate diagonals when requested', () => {
-        const rect = new Rectangle({ width: 4, height: 2 }, { calculateDiagonals: true });
+        const rect = new Rectangle({ 
+            lengths: { 
+                lengthAB: 4, 
+                lengthBC: 2 
+            }, 
+            supplementary: { 
+                calculateDiagonals: true 
+            } 
+        });
         expect(rect.lengthDiagonalAC).toBeCloseTo(Math.sqrt(4**2 + 2**2));
         expect(rect.lengthDiagonalBD).toBeCloseTo(Math.sqrt(4**2 + 2**2));
 
@@ -72,9 +100,29 @@ describe('Rectangle', () => {
     });
 
     it('should throw an exception for invalid dimensions', () => {
-        expect(() => new Rectangle({ width: -1, height: 2 })).toThrow(/Invalid lengths/);
-        expect(() => new Rectangle({ width: 2, height: -3 })).toThrow(/Invalid lengths/);
-        expect(() => new Rectangle({ width: "test", height: 2 })).toThrow(/Invalid lengths/);
-        expect(() => new Rectangle({ width: 2, height: NaN })).toThrow(/Invalid lengths/);
+        expect(() => new Rectangle({ 
+            lengths: { 
+                lengthAB: -1, 
+                lengthBC: 2 
+            } 
+        })).toThrow(/The length must be a positive number/);
+        expect(() => new Rectangle({ 
+            lengths: { 
+                lengthAB: 2, 
+                lengthBC: -3 
+            } 
+        })).toThrow(/The length must be a positive number/);
+        expect(() => new Rectangle({ 
+            lengths: { 
+                lengthAB: "test", 
+                lengthBC: 2 
+            } 
+        })).toThrow(/The length must be a positive number/);
+        expect(() => new Rectangle({ 
+            lengths: { 
+                lengthAB: 2, 
+                lengthBC: NaN 
+            } 
+        })).toThrow(/The length must be a positive number/);
     });
 });

@@ -3,7 +3,7 @@ import { Point } from '@flatten-js/core';
 import { shiftCoordinate2D } from '../functions/general.js'
 
 export default class Rectangle extends Quadrilateral {
-    constructor(lengths = {}, supplementary = {}){
+    constructor({lengths = {}, supplementary = {}}){
         super();
 
         if (Object.keys(lengths).length !== 2)
