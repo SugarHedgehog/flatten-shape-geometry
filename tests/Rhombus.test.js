@@ -136,4 +136,49 @@ describe('Rhombus', () => {
         expect(rhombus.lengthHeightDAB).toBeCloseTo(heightValue);
         expect(rhombus.lengthHeightDBC).toBeCloseTo(heightValue);
     });
+
+    it('should have correct vertex coordinates with different angle and length', () => {
+        const rhombus = new Rhombus({
+            length: 3,
+            angles: { 
+                angle: { angleA: 90 }, // Прямоугольный ромб (квадрат)
+                angleInDegree: true 
+            }
+        });
+        
+        // Для квадрата диагонали равны
+        const d1 = 2 * 3 * Math.cos(Math.PI / 4); // 90 градусов в радианах
+        const d2 = 2 * 3 * Math.sin(Math.PI / 4);
+        
+        expect(rhombus.pointA.x).toBeCloseTo(-d1 / 2);
+        expect(rhombus.pointA.y).toBeCloseTo(0);
+        expect(rhombus.pointB.x).toBeCloseTo(0);
+        expect(rhombus.pointB.y).toBeCloseTo(-d2 / 2);
+        expect(rhombus.pointC.x).toBeCloseTo(d1 / 2);
+        expect(rhombus.pointC.y).toBeCloseTo(0);
+        expect(rhombus.pointD.x).toBeCloseTo(0);
+        expect(rhombus.pointD.y).toBeCloseTo(d2 / 2);
+    });
+
+    it('should have correct vertex coordinates with angle in radians', () => {
+        const angleInRadians = Math.PI / 3; // 60 градусов
+        const rhombus = new Rhombus({
+            length: 2,
+            angles: { 
+                angle: { angleA: angleInRadians }
+            }
+        });
+        
+        const d1 = 2 * 2 * Math.cos(angleInRadians / 2);
+        const d2 = 2 * 2 * Math.sin(angleInRadians / 2);
+        
+        expect(rhombus.pointA.x).toBeCloseTo(-d1 / 2);
+        expect(rhombus.pointA.y).toBeCloseTo(0);
+        expect(rhombus.pointB.x).toBeCloseTo(0);
+        expect(rhombus.pointB.y).toBeCloseTo(-d2 / 2);
+        expect(rhombus.pointC.x).toBeCloseTo(d1 / 2);
+        expect(rhombus.pointC.y).toBeCloseTo(0);
+        expect(rhombus.pointD.x).toBeCloseTo(0);
+        expect(rhombus.pointD.y).toBeCloseTo(d2 / 2);
+    });
 });
