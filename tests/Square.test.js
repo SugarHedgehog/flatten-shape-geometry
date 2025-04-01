@@ -25,6 +25,8 @@ describe('Square', () => {
             expect(() => new Square({ length: -1 })).toThrow(/Invalid length/);
             expect(() => new Square({ length: "test" })).toThrow(/Invalid length/);
             expect(() => new Square({ length: NaN })).toThrow(/Invalid length/);
+            expect(() => new Square({ length: null })).toThrow(/Invalid length/);
+            expect(() => new Square({ length: undefined })).toThrow(/Invalid length/);
         });
 
         it('should throw an exception if length is missing', () => {
