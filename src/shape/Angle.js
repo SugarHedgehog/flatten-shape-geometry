@@ -83,4 +83,13 @@ export default class Angle {
     get angleInDegrees() {
         return radiansToDegrees(this.#angleInRadians);
     }
+    
+    get bisectorVector() {
+        const normalizedVector1 = this.#vector1.normalize();
+        const normalizedVector2 = this.#vector2.normalize();
+        
+        const bisector = normalizedVector1.add(normalizedVector2);
+        
+        return bisector.normalize();
+    }
 }
