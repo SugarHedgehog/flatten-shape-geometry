@@ -1,5 +1,6 @@
-import { Point, Segment, Line} from '@flatten-js/core';
+import { Point, Segment, Line } from '@flatten-js/core';
 import { subtract, dot, multiply, add } from 'mathjs';
+import Angle from '../shape/Angle'
 
 /**
  * Checks if three given side lengths can form a valid triangle.
@@ -148,3 +149,51 @@ export function perpendicular(point, segment) {
 export function calculateFootOfPerpendicular(point, segment){
     return perpendicular(point, segment)[1].pe;
 }
+
+/**
+ * Finds the bisector of an angle and its intersections with given segments.
+ * 
+ * @param {Angle} angle - The angle for which to find the bisector
+ * @param {Segment[]} segments - Array of segments to check for intersection with the bisector
+ * @returns {Segment[]} Array of segments from the angle's vertex to intersection points
+ * @throws {TypeError} If angle is not an instance of Angle or segments is not an array of Segments
+ */
+export function bisectorIntersection(param = {fP, sP, tP}, segments) {
+    if (!Array.isArray(segments) || !segments.every(s => s instanceof Segment)) {
+        throw new TypeError("segments must be an array of Segment instances");
+    }
+
+    if (typeof param !== 'object' ||
+        !('fP' in param) || !('sP' in param)) {
+        throw new TypeError("First argument must be an object containing 'fP' and 'sP' fields");
+    }
+
+    const {fP, sP, tP} = param;
+
+    let angle = new Angle(fP, sP, tP);
+
+    let startPoint;
+    if(sP instanceof Point)
+        startPoint = sP;
+
+    if(sP instanceof Segment)
+        startPoint = sP.start;
+    
+    const bisectorVector = angle.bisectorVector.rotate90CCW();
+
+    const bisectorLine = new Line(startPoint, bisectorVector);    
+
+    const resultSegments = [];
+    
+    for (const segment of segments) {
+        const intersection = segment.intersect(bisectorLine);
+        
+        if (intersection && intersection.length > 0 && segment.contains(intersection[0])) {
+            const bisectorSegment = new Segment(startPoint, intersection[0]);
+            resultSegments.push(bisectorSegment);
+         }
+    }
+    
+    return resultSegments;
+}
+
