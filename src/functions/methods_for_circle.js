@@ -21,3 +21,7 @@ Circle.prototype.pointOnCircle = function (angle, {angleInDegrees = false, count
         this.r * Math.sin(angle) + this.pc.y
     );
 }
+
+Circle.prototype.radius = function (angle, {angleInDegrees = false, counterclockwise = false} = {}) {
+    return new Segment(this.pc, this.pointOnCircle(angle, {angleInDegrees, counterclockwise}))
+}
