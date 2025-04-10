@@ -25,3 +25,15 @@ Circle.prototype.pointOnCircle = function (angle, {angleInDegrees = false, count
 Circle.prototype.radius = function (angle, {angleInDegrees = false, counterclockwise = false} = {}) {
     return new Segment(this.pc, this.pointOnCircle(angle, {angleInDegrees, counterclockwise}))
 }
+
+Circle.prototype.diameter = function(angle, {angleInDegrees = false, counterclockwise = false} = {}) {
+    const startPoint = this.pointOnCircle(angle, {angleInDegrees, counterclockwise});
+    const oppositeAngle = angle + (angleInDegrees ? 180 : Math.PI);
+    const endPoint = this.pointOnCircle(oppositeAngle, {
+        angleInDegrees,
+        counterclockwise
+    });
+    
+    return new Segment(startPoint, endPoint);
+};
+
