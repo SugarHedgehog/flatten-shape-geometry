@@ -37,3 +37,14 @@ Circle.prototype.diameter = function(angle, {angleInDegrees = false, countercloc
     return new Segment(startPoint, endPoint);
 };
 
+Circle.prototype.chordByAngles = function(startAngle, endAngle, {angleInDegrees = false, counterclockwise = false} = {}) {
+    if (startAngle == endAngle) {
+        throw new Error("The angles must not match");
+    }
+
+    const startPoint = this.pointOnCircle(startAngle, {angleInDegrees, counterclockwise});
+    const endPoint = this.pointOnCircle(endAngle, {angleInDegrees, counterclockwise});
+    
+    return new Segment(startPoint, endPoint);
+};
+
