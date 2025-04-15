@@ -48,19 +48,17 @@ Circle.prototype.chordByAngles = function(startAngle, endAngle, {angleInDegrees 
     return new Segment(startPoint, endPoint);
 };
 
-Circle.prototype.tangentsFromPoint = function(point, {segmentLength = 0} = {}) {
+Circle.prototype.tangentPointsFromPoint = function(point) {
     if (!(point instanceof Point)) {
         throw new Error("First argument must be a Point");
     }
-    if (typeof segmentLength !== 'number' || segmentLength < 0) {
-        throw new Error("segmentLength must be a non-negative number");
-    }
-    
+
     const circle = this;
     const center = circle.center;
     const radius = circle.r;
     
     const distanceToCenter = center.distanceTo(point)[0];
+
     if (distanceToCenter <= radius) {
         throw new Error("Point must be outside the circle");
     }
@@ -70,27 +68,38 @@ Circle.prototype.tangentsFromPoint = function(point, {segmentLength = 0} = {}) {
     
     const angle = Math.acos(radius / d);
     
-    // Рассчитываем базовые точки касания
     const rotatedVec1 = vecToPoint.rotate(angle).normalize();
     const rotatedVec2 = vecToPoint.rotate(-angle).normalize();
     
     let tangentPoint1 = center.translate(rotatedVec1.multiply(radius));
     let tangentPoint2 = center.translate(rotatedVec2.multiply(radius));
+ 
+    return [tangentPoint1, tangentPoint2];
+};
 
-    // Если задана длина отрезка, устанавливаем фиксированную длину
+Circle.prototype.tangentsFromPoint = function(point, {segmentLength = 0} = {}) {
+    if (!(point instanceof Point)) {
+        throw new Error("First argument must be a Point");
+    }
+
+    if (typeof segmentLength !== 'number' || segmentLength < 0) {
+        throw new Error("segmentLength must be a non-negative number");
+    }
+
+    const tangentPoints = this.tangentPointsFromPoint(point, options);
+    const [tangentPoint1, tangentPoint2] = tangentPoints;
+
     if (segmentLength > 0) {
-        // Создаем векторы ОТ центральной точки К точкам касания
         const vector1 = new Vector(point, tangentPoint1).normalize();
         const vector2 = new Vector(point, tangentPoint2).normalize();
         
-        // Устанавливаем новые позиции с фиксированной длиной от центра
         tangentPoint1 = point.translate(vector1.multiply(segmentLength));
         tangentPoint2 = point.translate(vector2.multiply(segmentLength));
     }
-
+    
     return [
-        new Segment(point, tangentPoint1),
-        new Segment(point, tangentPoint2)
+       [tangentPoints[0], new Segment(point, tangentPoint1)],
+       [tangentPoints[1], new Segment(point, tangentPoint2)]
     ];
 };
 
