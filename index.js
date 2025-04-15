@@ -1,7 +1,8 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+import { Circle } from '@flatten-js/core';  
 import {isValidTriangle, calculateThirdSideUsingCosineLaw, bisectorIntersection} from './src/functions/general'
-import './src/functions/methods_for_circle';
+import './src/functions/methods_for_circle';  
 import Angle from './src/shape/Angle';
 import Triangle from './src/shape/Triangle';
 import Square from './src/shape/Square';
@@ -20,3 +21,4 @@ window.Rectangle = Rectangle;
 window.Rhombus = Rhombus;
 window.Parallelogram = Parallelogram;
 window.Trapezoid = Trapezoid;
+window.Circle = Circle;
