@@ -87,7 +87,6 @@ Circle.prototype.tangentsFromPoint = function(point, {segmentLength = 0}={}) {
     }
 
     const tangentPoints = this.tangentPointsFromPoint(point);
-    console.log(tangentPoints);
     let tangentPoint1 = tangentPoints[0];
     let tangentPoint2 = tangentPoints[1];
 
