@@ -50,7 +50,7 @@ Circle.prototype.chordByAngles = function(startAngle, endAngle, {angleInDegrees 
 
 Circle.prototype.tangentPointsFromPoint = function(point) {
     if (!(point instanceof Point)) {
-        throw new Error("First argument must be a Point");
+        throw new TypeError("First argument must be a Point instance");
     }
 
     const circle = this;
@@ -73,21 +73,23 @@ Circle.prototype.tangentPointsFromPoint = function(point) {
     
     let tangentPoint1 = center.translate(rotatedVec1.multiply(radius));
     let tangentPoint2 = center.translate(rotatedVec2.multiply(radius));
- 
+    
     return [tangentPoint1, tangentPoint2];
 };
 
-Circle.prototype.tangentsFromPoint = function(point, {segmentLength = 0} = {}) {
+Circle.prototype.tangentsFromPoint = function(point, {segmentLength = 0}={}) {
     if (!(point instanceof Point)) {
-        throw new Error("First argument must be a Point");
+        throw new TypeError("First argument must be a Point instance");
     }
 
     if (typeof segmentLength !== 'number' || segmentLength < 0) {
         throw new Error("segmentLength must be a non-negative number");
     }
 
-    const tangentPoints = this.tangentPointsFromPoint(point, options);
-    const [tangentPoint1, tangentPoint2] = tangentPoints;
+    const tangentPoints = this.tangentPointsFromPoint(point);
+    console.log(tangentPoints);
+    let tangentPoint1 = tangentPoints[0];
+    let tangentPoint2 = tangentPoints[1];
 
     if (segmentLength > 0) {
         const vector1 = new Vector(point, tangentPoint1).normalize();
@@ -98,8 +100,8 @@ Circle.prototype.tangentsFromPoint = function(point, {segmentLength = 0} = {}) {
     }
     
     return [
-       [tangentPoints[0], new Segment(point, tangentPoint1)],
-       [tangentPoints[1], new Segment(point, tangentPoint2)]
+       [tangentPoints[0], new Segment(tangentPoint1, point)],
+       [tangentPoints[1], new Segment(tangentPoint2, point)]
     ];
 };
 
