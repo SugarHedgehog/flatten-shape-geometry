@@ -10,6 +10,7 @@ import Rectangle from './src/shape/Rectangle';
 import Rhombus from './src/shape/Rhombus';
 import Parallelogram from './src/shape/Parallelogram';
 import Trapezoid from './src/shape/Trapezoid';
+import CircleByPoints from './src/shape/CircleByPoints';
 
 window.Point = Point;
 window.Vector = Vector;
@@ -32,4 +33,5 @@ window.Rectangle = Rectangle;
 window.Rhombus = Rhombus;
 window.Parallelogram = Parallelogram;
 window.Trapezoid = Trapezoid;
+window.CircleByPoints = CircleByPoints;
 
