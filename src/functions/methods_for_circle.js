@@ -9,7 +9,7 @@ Circle.prototype.pointOnCircle = function (angle, {angleInDegrees = false, count
     angle = angleInDegrees ? degreesToRadians(angle) : angle;
 
     if (Math.abs(angle) > 2 * Math.PI) {
-        throw new Error(`The angle is greater than 2 pi`);
+        angle %= 2*Math.PI;
     }
 
     if(counterclockwise){

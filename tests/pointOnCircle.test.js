@@ -32,10 +32,6 @@ describe('Circle.prototype.pointOnCircle', () => {
     expect(() => circle.pointOnCircle(0)).not.toThrow();
   });
 
-  test('Throws error for angle > 2π', () => {
-    expect(() => circle.pointOnCircle(3 * Math.PI)).toThrow("The angle is greater than 2 pi");
-  });
-
   test('Boundary angle cases', () => {
     expect(circle.pointOnCircle(Math.PI/2).x).toBeCloseTo(0);
     expect(circle.pointOnCircle(Math.PI/2).y).toBeCloseTo(5);

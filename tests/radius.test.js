@@ -24,7 +24,6 @@ describe('Circle.prototype.radius', () => {
 
   test('Propagates errors from invalid angles', () => {
     expect(() => circle.radius('90')).toThrow('Angle must be a number');
-    expect(() => circle.radius(3 * Math.PI)).toThrow('greater than 2 pi');
   });
 
   test('Works with default parameters', () => {
