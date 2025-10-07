@@ -5,25 +5,26 @@ import { shiftCoordinate2D } from '../functions/general.js'
 export default class Rectangle extends Quadrilateral {
     constructor({points = [], lengths = {}, supplementary = {}} = {}){
         super();
+        
+        const {
+            calculateDiagonals = false,
+            shiftCoordinate = true
+        } = supplementary;
 
         this.#setAngles();
 
         switch (true) {
             case Array.isArray(points) && points.length === 4 && points.every(p => Number.isFinite(p.x) && Number.isFinite(p.y)):
-                this.#setCoordinatesFromPoints(points);
+                this.#setCoordinatesFromPoints(points, shiftCoordinate);
                 break;
             case Object.keys(lengths).length == 2:
-                this.#setCoordites(lengths);
+                this.#setCoordites(lengths, shiftCoordinate);
                 break;
             default:
                 throw new TypeError(`Invalid arguments: Received points ${JSON.stringify(points)}, lengths ${JSON.stringify(lengths)}. Please provide either four Point or two side lengths`);
         }   
 
         this.addFace(this._vertices);
-
-        const {
-            calculateDiagonals = false,
-        } = supplementary;
 
         if(calculateDiagonals){
             this._setDiagonals();
@@ -37,7 +38,7 @@ export default class Rectangle extends Quadrilateral {
         this._angleDInRadians = Math.PI / 2;
     }
 
-    #setCoordinatesFromPoints(points) {
+    #setCoordinatesFromPoints(points, shiftCoordinate) {
         const pts = points.map(p => (p instanceof Point ? p : new Point(p.x, p.y)));
 
         // Order points around the centroid to ensure A->B->C->D sequence
@@ -66,12 +67,17 @@ export default class Rectangle extends Quadrilateral {
         // Calculate center of rectangle (intersection of diagonals)
         const centerX = (ordered[0].x + ordered[2].x) / 2;
         const centerY = (ordered[0].y + ordered[2].y) / 2;
+        
+        if (shiftCoordinate) {
+            [this._pointA, this._pointB, this._pointC, this._pointD] = pts.map((vertex) => shiftCoordinate2D(vertex, new Point(centerX, centerY)));
+        } else {
+            [this._pointA, this._pointB, this._pointC, this._pointD] = pts;
+        }
 
-        [this._pointA, this._pointB, this._pointC, this._pointD] = pts.map((vertex) => shiftCoordinate2D(vertex, new Point(centerX, centerY)));
         this._vertices = [this._pointA, this._pointB, this._pointC, this._pointD];
     }
 
-    #setCoordites(lengths) {
+    #setCoordites(lengths, shiftCoordinate) {
         let width, height;
 
         Object.keys(lengths).forEach(key => {
@@ -99,7 +105,12 @@ export default class Rectangle extends Quadrilateral {
         const C = new Point(width, height);
         const D = new Point(0, height);
 
-        [this._pointA, this._pointB, this._pointC, this._pointD] = [A, B, C, D].map((vertex) => shiftCoordinate2D(vertex, new Point(width / 2, height / 2)));
+        if (shiftCoordinate) {
+            [this._pointA, this._pointB, this._pointC, this._pointD] = [A, B, C, D].map((vertex) => shiftCoordinate2D(vertex, new Point(width / 2, height / 2)));
+        } else {
+            [this._pointA, this._pointB, this._pointC, this._pointD] = [A, B, C, D];
+        }
+    
         this._vertices = [this._pointA, this._pointB, this._pointC, this._pointD];
     }
 }
