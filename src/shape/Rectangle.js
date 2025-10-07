@@ -3,14 +3,22 @@ import { Point } from '@flatten-js/core';
 import { shiftCoordinate2D } from '../functions/general.js'
 
 export default class Rectangle extends Quadrilateral {
-    constructor({lengths = {}, supplementary = {}}){
+    constructor({points = [], lengths = {}, supplementary = {}} = {}){
         super();
 
-        if (Object.keys(lengths).length !== 2)
-            throw new Error(`There must be exactly two lengths. Received: ${JSON.stringify(lengths)}`);
-
         this.#setAngles();
-        this.#setCoordites(lengths);
+
+        switch (true) {
+            case Array.isArray(points) && points.length === 4 && points.every(p => Number.isFinite(p.x) && Number.isFinite(p.y)):
+                this.#setCoordinatesFromPoints(points);
+                break;
+            case Object.keys(lengths).length == 2:
+                this.#setCoordites(lengths);
+                break;
+            default:
+                throw new TypeError(`Invalid arguments: Received points ${JSON.stringify(points)}, lengths ${JSON.stringify(lengths)}. Please provide either four Point or two side lengths`);
+        }   
+
         this.addFace(this._vertices);
 
         const {
@@ -27,6 +35,40 @@ export default class Rectangle extends Quadrilateral {
         this._angleBInRadians = Math.PI / 2;
         this._angleCInRadians = Math.PI / 2;
         this._angleDInRadians = Math.PI / 2;
+    }
+
+    #setCoordinatesFromPoints(points) {
+        const pts = points.map(p => (p instanceof Point ? p : new Point(p.x, p.y)));
+
+        // Order points around the centroid to ensure A->B->C->D sequence
+        const cx = (pts[0].x + pts[1].x + pts[2].x + pts[3].x) / 4;
+        const cy = (pts[0].y + pts[1].y + pts[2].y + pts[3].y) / 4;
+        const ordered = pts.slice().sort((a, b) => Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx));
+
+        // Validate rectangle properties: adjacent sides perpendicular and opposite sides equal
+        const eps = 1e-9;
+        const vec = (p, q) => ({ x: q.x - p.x, y: q.y - p.y });
+        const dot = (u, v) => u.x * v.x + u.y * v.y;
+        const len2 = (u) => u.x * u.x + u.y * u.y;
+
+        const AB = vec(ordered[0], ordered[1]);
+        const BC = vec(ordered[1], ordered[2]);
+        const CD = vec(ordered[2], ordered[3]);
+        const DA = vec(ordered[3], ordered[0]);
+
+        if (Math.abs(dot(AB, BC)) > eps || Math.abs(dot(BC, CD)) > eps || Math.abs(dot(CD, DA)) > eps || Math.abs(dot(DA, AB)) > eps) {
+            throw new Error("Provided points do not form a rectangle: adjacent sides are not perpendicular");
+        }
+        if (Math.abs(len2(AB) - len2(CD)) > eps || Math.abs(len2(BC) - len2(DA)) > eps) {
+            throw new Error("Provided points do not form a rectangle: opposite sides are not equal");
+        }
+
+        // Calculate center of rectangle (intersection of diagonals)
+        const centerX = (ordered[0].x + ordered[2].x) / 2;
+        const centerY = (ordered[0].y + ordered[2].y) / 2;
+
+        [this._pointA, this._pointB, this._pointC, this._pointD] = pts.map((vertex) => shiftCoordinate2D(vertex, new Point(centerX, centerY)));
+        this._vertices = [this._pointA, this._pointB, this._pointC, this._pointD];
     }
 
     #setCoordites(lengths) {
