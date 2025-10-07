@@ -80,7 +80,8 @@ export default class Triangle extends ShapeWithConnectionMatrix {
             calculateMedians = false,
             calculateHeights = false,
             calculateBisectors = false,
-            calculateMidlines = false
+            calculateMidlines = false,
+            shiftCoordinate = true
         } = supplementary;
 
         this._connectionMatrix = [
@@ -93,7 +94,8 @@ export default class Triangle extends ShapeWithConnectionMatrix {
         switch (true) {
             case points && points.length === 3 && points.every(p => Number.isFinite(p.x) && Number.isFinite(p.y)):                [this.#pointA, this.#pointB, this.#pointC] = points.map(p => new Point(p.x, p.y));
                 let circumcenter = findCircumcenter2D(this.#pointA, this.#pointB, this.#pointC);
-                [this.#pointA, this.#pointB, this.#pointC] = [this.#pointA, this.#pointB, this.#pointC].map(vertex => shiftCoordinate2D(vertex, circumcenter));
+                if(shiftCoordinate)
+                    [this.#pointA, this.#pointB, this.#pointC] = [this.#pointA, this.#pointB, this.#pointC].map(vertex => shiftCoordinate2D(vertex, circumcenter));
                 break;
 
             case Object.keys(lengths).length == 3:
