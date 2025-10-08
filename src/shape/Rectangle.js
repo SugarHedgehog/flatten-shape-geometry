@@ -1,6 +1,7 @@
 import Quadrilateral from "./Quadrilateral.js";
-import { Point } from '@flatten-js/core';
-import { shiftCoordinate2D } from '../functions/general.js'
+import { Point, Segment } from "@flatten-js/core";
+import { shiftCoordinate2D, isValidQuadrilateral} from '../functions/general.js'
+import Angle from "./Angle.js";
 
 export default class Rectangle extends Quadrilateral {
     constructor({points = [], lengths = {}, supplementary = {}} = {}){
@@ -39,37 +40,54 @@ export default class Rectangle extends Quadrilateral {
     }
 
     #setCoordinatesFromPoints(points, shiftCoordinate) {
-        const pts = points.map(p => (p instanceof Point ? p : new Point(p.x, p.y)));
-
-        // Order points around the centroid to ensure A->B->C->D sequence
-        const cx = (pts[0].x + pts[1].x + pts[2].x + pts[3].x) / 4;
-        const cy = (pts[0].y + pts[1].y + pts[2].y + pts[3].y) / 4;
-        const ordered = pts.slice().sort((a, b) => Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx));
-
-        // Validate rectangle properties: adjacent sides perpendicular and opposite sides equal
         const eps = 1e-9;
-        const vec = (p, q) => ({ x: q.x - p.x, y: q.y - p.y });
-        const dot = (u, v) => u.x * v.x + u.y * v.y;
-        const len2 = (u) => u.x * u.x + u.y * u.y;
-
-        const AB = vec(ordered[0], ordered[1]);
-        const BC = vec(ordered[1], ordered[2]);
-        const CD = vec(ordered[2], ordered[3]);
-        const DA = vec(ordered[3], ordered[0]);
-
-        if (Math.abs(dot(AB, BC)) > eps || Math.abs(dot(BC, CD)) > eps || Math.abs(dot(CD, DA)) > eps || Math.abs(dot(DA, AB)) > eps) {
-            throw new Error("Provided points do not form a rectangle: adjacent sides are not perpendicular");
-        }
-        if (Math.abs(len2(AB) - len2(CD)) > eps || Math.abs(len2(BC) - len2(DA)) > eps) {
-            throw new Error("Provided points do not form a rectangle: opposite sides are not equal");
+        const pts = points.map(p => (p instanceof Point ? p : new Point(p.x, p.y)));
+        if (pts.length !== 4) {
+            throw new TypeError("Expected 4 points to define a rectangle");
         }
 
-        // Calculate center of rectangle (intersection of diagonals)
-        const centerX = (ordered[0].x + ordered[2].x) / 2;
-        const centerY = (ordered[0].y + ordered[2].y) / 2;
+        const [A, B, C, D] = pts;
+
+        const AB = new Segment(A, B);
+        const BC = new Segment(B, C);
+        const CD = new Segment(C, D);
+        const DA = new Segment(D, A);
+
+        if (!isValidQuadrilateral(AB.length, BC.length, CD.length, DA.length)) {
+            throw new Error(
+                "Provided points do not form a valid quadrilateral: side-length constraints not satisfied"
+            );
+        }
         
+        let angleABC = new Angle(AB, BC).angleInRadians - Math.PI/2;
+        let angleBCD = new Angle(BC, CD).angleInRadians - Math.PI/2;
+        let angleCDA = new Angle(CD, DA).angleInRadians - Math.PI/2;
+        let angleDAB = new Angle(DA, AB).angleInRadians - Math.PI/2;
+
+        // 2) Rectangle validation: adjacent sides perpendicular and opposite sides equal
+        if (
+            Math.abs(angleABC) > eps ||
+            Math.abs(angleBCD) > eps ||
+            Math.abs(angleCDA) > eps ||
+            Math.abs(angleDAB) > eps
+        ) {
+            throw new Error(
+                "Provided points do not form a rectangle: adjacent sides are not perpendicular"
+            );
+        }
+        if (Math.abs(AB.length - CD.length) > eps || Math.abs(BC.length - DA.length) > eps) {
+            throw new Error(
+                "Provided points do not form a rectangle: opposite sides are not equal"
+            );
+        }
+
+        // Center (intersection of diagonals)
+        const center = new Segment(A,C).middle();
+
         if (shiftCoordinate) {
-            [this._pointA, this._pointB, this._pointC, this._pointD] = pts.map((vertex) => shiftCoordinate2D(vertex, new Point(centerX, centerY)));
+            [this._pointA, this._pointB, this._pointC, this._pointD] = pts.map(v =>
+                shiftCoordinate2D(v, center)
+            );
         } else {
             [this._pointA, this._pointB, this._pointC, this._pointD] = pts;
         }
