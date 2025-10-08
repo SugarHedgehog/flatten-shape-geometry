@@ -1,15 +1,24 @@
 import Quadrilateral from "./Quadrilateral";
 import Angle from "./Angle.js";
-import { Point } from '@flatten-js/core';
+import { Point, Segment, Line} from '@flatten-js/core';
 import degreesToRadians from 'degrees-radians';
-import { shiftCoordinate2D} from '../functions/general.js'
+import { shiftCoordinate2D, isValidQuadrilateral } from '../functions/general.js'
 
 export default class Trapezoid extends Quadrilateral {
-    constructor({ lengths = {}, height = 0, angles = {}, supplementary = {} }) {
+    constructor({ points = [], lengths = {}, height = 0, angles = {}, supplementary = {} } = {}) {
         super();
         let vertices;
 
+        const {
+            calculateDiagonals = false,
+            calculateHeights = false,
+            shiftCoordinate = true,
+        } = supplementary;
+
         switch (true) {
+            case Array.isArray(points) && points.length === 4 && points.every(p => Number.isFinite(p.x) && Number.isFinite(p.y)):
+                vertices = this.#trapezoidByPoints(points);
+                break;
             case Object.keys(lengths).length === 4:
                 vertices = this._trapezoidByLengths(lengths);
                 break;
@@ -21,20 +30,20 @@ export default class Trapezoid extends Quadrilateral {
                 vertices = this._trapezoidByTwoBasesHeightAngle(lengths, height, angleKey, angleInRadians);
                 break;
             default:
-                throw new Error(`Invalid combination of parameters: ${JSON.stringify({ lengths, angles })}`);
+                throw new Error(`Invalid combination of parameters: ${JSON.stringify({ points, lengths, angles, height })}`);
         }
 
-        [this._pointA, this._pointB, this._pointC, this._pointD] = vertices;
-        this._vertices = vertices.map((vertex) => shiftCoordinate2D(vertex, this.diagonalIntersectionPoint));
-        [this._pointA, this._pointB, this._pointC, this._pointD] = this._vertices;
+        if (shiftCoordinate) {
+            const center = new Segment(vertices[0], vertices[2]).intersect(new Segment(vertices[1], vertices[3]))[0];
+            this._vertices = vertices.map(v => shiftCoordinate2D(v, center));
+            [this._pointA, this._pointB, this._pointC, this._pointD] = this._vertices;
+        } else {
+            [this._pointA, this._pointB, this._pointC, this._pointD] = vertices;
+            this._vertices = vertices;
+        }
 
         this.#setAngles();
         this.addFace(this._vertices);
-
-        const {
-            calculateDiagonals = false,
-            calculateHeights = false,
-        } = supplementary;
 
         if (calculateDiagonals) {
             this._setDiagonals();
@@ -46,10 +55,10 @@ export default class Trapezoid extends Quadrilateral {
     }
 
     #setAngles() {
-            this._angleAInRadians = new Angle(this._pointB, this._pointA, this._pointD).angleInRadians;
-            this._angleBInRadians = new Angle(this._pointA, this._pointB, this._pointC).angleInRadians;
-            this._angleCInRadians = new Angle(this._pointB, this._pointC, this._pointD).angleInRadians;
-            this._angleDInRadians = new Angle(this._pointA, this._pointD, this._pointC).angleInRadians;
+        this._angleAInRadians = new Angle(this._pointB, this._pointA, this._pointD).angleInRadians;
+        this._angleBInRadians = new Angle(this._pointA, this._pointB, this._pointC).angleInRadians;
+        this._angleCInRadians = new Angle(this._pointB, this._pointC, this._pointD).angleInRadians;
+        this._angleDInRadians = new Angle(this._pointA, this._pointD, this._pointC).angleInRadians;
     }
 
     _trapezoidByLengths(lengths) {
@@ -142,6 +151,40 @@ export default class Trapezoid extends Quadrilateral {
         const D = new Point(xOffset, height);
         const C = new Point(xOffset + lengthCD, height);
                 
+        return [A, B, C, D];
+    }
+
+    #trapezoidByPoints(points) {
+        const pts = points.map(p => (p instanceof Point ? p : new Point(p.x, p.y)));
+        if (pts.length !== 4) {
+            throw new TypeError("Expected 4 points to define a trapezoid");
+        }
+
+        const [A, B, C, D] = pts;
+
+        const AB = new Segment(A, B);
+        const BC = new Segment(B, C);
+        const CD = new Segment(C, D);
+        const DA = new Segment(D, A);
+
+        if (!isValidQuadrilateral(AB.length, BC.length, CD.length, DA.length)) {
+            throw new Error(
+                "Provided points do not form a valid quadrilateral: side-length constraints not satisfied"
+            );
+        }
+        
+        let lineAB = new Line(AB.ps, AB.pe);
+        let lineBC = new Line(BC.ps, BC.pe);
+        let lineCD = new Line(CD.ps, CD.pe);
+        let lineDA = new Line(DA.ps, DA.pe);
+
+        const abParallelCd = lineAB.intersect(lineCD).length == 0;
+        const bcParallelDa = lineBC.intersect(lineDA).length == 0;
+
+        if (!((abParallelCd || bcParallelDa) && !(abParallelCd && bcParallelDa))) {
+            throw new Error("Provided points do not form a trapezoid: no pair of opposite sides are parallel");
+        }
+
         return [A, B, C, D];
     }
 }
