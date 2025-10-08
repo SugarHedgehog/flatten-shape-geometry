@@ -86,15 +86,15 @@ describe('Rhombus', () => {
         expect(() => new Rhombus({ 
             length: -1, 
             angles: { angle: { angleA: 60 } } 
-        })).toThrow(/Invalid length/);
+        })).toThrow(/Invalid arguments/);
         expect(() => new Rhombus({ 
             length: "test", 
             angles: { angle: { angleA: 60 } } 
-        })).toThrow(/Invalid length/);
+        })).toThrow(/Invalid arguments/);
         expect(() => new Rhombus({ 
             length: NaN, 
             angles: { angle: { angleA: 60 } } 
-        })).toThrow(/Invalid length/);
+        })).toThrow(/Invalid arguments/);
     });
 
     it('should throw an exception for invalid angles', () => {
