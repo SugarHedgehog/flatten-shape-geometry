@@ -22,15 +22,15 @@ describe('Square', () => {
         });
 
         it('should throw an exception for invalid length', () => {
-            expect(() => new Square({ length: -1 })).toThrow(/Invalid length/);
-            expect(() => new Square({ length: "test" })).toThrow(/Invalid length/);
-            expect(() => new Square({ length: NaN })).toThrow(/Invalid length/);
-            expect(() => new Square({ length: null })).toThrow(/Invalid length/);
-            expect(() => new Square({ length: undefined })).toThrow(/Invalid length/);
+            expect(() => new Square({ length: -1 })).toThrow(/Invalid arguments/);
+            expect(() => new Square({ length: "test" })).toThrow(/Invalid arguments/);
+            expect(() => new Square({ length: NaN })).toThrow(/Invalid arguments/);
+            expect(() => new Square({ length: null })).toThrow(/Invalid arguments/);
+            expect(() => new Square({ length: undefined })).toThrow(/Invalid arguments/);
         });
 
         it('should throw an exception if length is missing', () => {
-            expect(() => new Square({})).toThrow(/Invalid length/);
+            expect(() => new Square({})).toThrow(/Invalid arguments/);
         });
     });
 
