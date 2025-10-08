@@ -92,7 +92,7 @@ describe('Parallelogram', () => {
     });
 
     it('should throw an exception for invalid lengths', () => {
-        expect(() => new Parallelogram({})).toThrow(/No lengths of the parallelogram are defined/);
+        expect(() => new Parallelogram({})).toThrow(/Invalid arguments/);
         expect(() => new Parallelogram({
             lengths: { lengthAB: -1, lengthBC: 2 },
             angles: { angle: { angleA: 60 } }
